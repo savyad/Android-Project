@@ -1,0 +1,1 @@
+include ':app', ':highcharts-release-v7.0.1'

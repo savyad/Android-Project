@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_constr"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#435153"
+    tools:context=".ControlActivity">
+
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/thirdconst"
+        android:layout_width="0dp"
+        android:layout_height="534dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="112dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="147dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="8dp"
+            android:background="#f9c2c2c2"
+            android:text="Recording Mode"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/read_cnt" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="147dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="8dp"
+            android:background="#f9c2c2c2"
+            android:text="Logging Started"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView26" />
+
+        <TextView
+            android:id="@+id/loggings"
+            android:layout_width="163dp"
+            android:layout_height="25dp"
+
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="#55252424"
+            android:text="Date"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/textView10"
+            app:layout_constraintTop_toBottomOf="@+id/cali_due" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="147dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="8dp"
+            android:background="#f9c2c2c2"
+            android:text="Logging Status"
+
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+        <TextView
+            android:id="@+id/logginge"
+            android:layout_width="163dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="#55252424"
+            android:text="Date"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/textView12"
+            app:layout_constraintTop_toBottomOf="@+id/loggings" />
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="147dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="8dp"
+            android:background="#f9c2c2c2"
+            android:text="Calibrated on"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <TextView
+            android:id="@+id/cali_on"
+            android:layout_width="163dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="8dp"
+            android:background="#55252424"
+            android:text="Date"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            app:layout_constraintStart_toEndOf="@+id/textView16"
+            app:layout_constraintTop_toBottomOf="@+id/supp" />
+
+        <ProgressBar
+            android:id="@+id/refresh"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:progressDrawable="@color/colorPrimaryDark"
+            android:progressTint="@color/colorPrimaryDark"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.605"
+            tools:visibility="gone" />
+
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="147dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="20dp"
+            android:background="#f9c2c2c2"
+            android:text="Start Trigger"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rec_mode" />
+
+
+        <Spinner
+            android:id="@+id/log_trigger"
+            android:layout_width="111dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="8dp"
+
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/tri_info"
+            app:layout_constraintTop_toBottomOf="@+id/rec_mode" />
+
+
+        <TextView
+            android:id="@+id/tri_info"
+            android:layout_width="78dp"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="20dp"
+            android:background="#55252424"
+            android:text="- -"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            app:layout_constraintStart_toEndOf="@+id/textView9"
+            app:layout_constraintTop_toBottomOf="@+id/rec_mode" />
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="147dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="40dp"
+            android:background="#f9c2c2c2"
+            android:text="Device Name"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/dev_name"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="8dp"
+            android:background="#55252424"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="sasss"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            android:textCursorDrawable="@drawable/cursor_col"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/textView15"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView21"
+            android:layout_width="147dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="8dp"
+            android:background="#f9c2c2c2"
+            android:text="Operator"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+        <EditText
+            android:id="@+id/op_name"
+            android:layout_width="163dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="8dp"
+            android:background="#55252424"
+            android:ems="10"
+            android:inputType="textPersonName|textFilter"
+            android:text="Opert. Name"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            android:textCursorDrawable="@drawable/cursor_col"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/textView21"
+            app:layout_constraintTop_toBottomOf="@+id/dev_name" />
+
+        <TextView
+            android:id="@+id/textView24"
+            android:layout_width="147dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="8dp"
+            android:background="#f9c2c2c2"
+
+            android:text="Battery Voltage"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/log_trigger" />
+
+        <TextView
+            android:id="@+id/batt_volt"
+            android:layout_width="163dp"
+            android:layout_height="25dp"
+
+            android:layout_marginTop="8dp"
+            android:background="#55252424"
+            android:text="Batt.Vltg"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            app:layout_constraintStart_toEndOf="@+id/textView24"
+            app:layout_constraintTop_toBottomOf="@+id/log_trigger" />
+
+        <TextView
+            android:id="@+id/textView26"
+            android:layout_width="147dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="8dp"
+            android:background="#f9c2c2c2"
+
+            android:text="Calibration Due"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView16" />
+
+        <TextView
+            android:id="@+id/cali_due"
+            android:layout_width="163dp"
+            android:layout_height="25dp"
+
+            android:layout_marginTop="8dp"
+            android:background="#55252424"
+            android:text="Date"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            app:layout_constraintStart_toEndOf="@+id/textView26"
+            app:layout_constraintTop_toBottomOf="@+id/cali_on" />
+
+        <TextView
+            android:id="@+id/textView28"
+            android:layout_width="147dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="8dp"
+            android:background="#f9c2c2c2"
+            android:text="No. of Reading"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logginge" />
+
+        <TextView
+            android:id="@+id/read_cnt"
+            android:layout_width="163dp"
+            android:layout_height="25dp"
+
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="#55252424"
+            android:text="Readin Cnt."
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/textView28"
+            app:layout_constraintTop_toBottomOf="@+id/logginge" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="147dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="8dp"
+            android:background="#f9c2c2c2"
+            android:text="Logging"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView24" />
+
+        <Switch
+            android:id="@+id/logging_on_off"
+            android:layout_width="45dp"
+            android:layout_height="17dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.058"
+            app:layout_constraintStart_toEndOf="@+id/textView3"
+            app:layout_constraintTop_toBottomOf="@+id/batt_volt" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="147dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="8dp"
+            android:background="#f9c2c2c2"
+            android:text="Advertise In Sleep"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+        <Switch
+            android:id="@+id/ad_sleep"
+            android:layout_width="45dp"
+            android:layout_height="17dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.042"
+            app:layout_constraintStart_toEndOf="@+id/textView5"
+            app:layout_constraintTop_toBottomOf="@+id/logging_on_off" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="147dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="12dp"
+            android:background="#f9c2c2c2"
+            android:text="Advertise Interval"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+        <!--<com.vicmikhailau.maskededittext.MaskedEditText
+            android:id="@+id/ad_inter"
+            android:layout_width="88dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="8dp"
+            android:background="#55252424"
+            android:hint="hh:mm:ss"
+            android:inputType="number"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            android:textColorHint="#a4a4a4"
+            app:layout_constraintStart_toEndOf="@+id/textView6"
+            app:layout_constraintTop_toBottomOf="@+id/ad_sleep"
+            app:mask="##:##:##" />-->
+
+        <!--<com.vicmikhailau.maskededittext.MaskedEditText
+            android:layout_width="93dp"
+            android:layout_height="51dp"
+
+            android:textColor="@color/colorAccent"
+            app:mask="##-##-##"
+            tools:layout_editor_absoluteX="285dp"
+            tools:layout_editor_absoluteY="373dp" />-->
+
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="147dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="8dp"
+            android:background="#f9c2c2c2"
+            android:text="Supply Power"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView21" />
+
+        <TextView
+            android:id="@+id/supp"
+            android:layout_width="163dp"
+            android:layout_height="25dp"
+
+            android:layout_marginTop="8dp"
+            android:background="#55252424"
+            android:text="Supp.P"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            app:layout_constraintStart_toEndOf="@+id/textView"
+            app:layout_constraintTop_toBottomOf="@+id/op_name" />
+
+        <Spinner
+            android:id="@+id/rec_mode"
+            android:layout_width="147dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:visibility="visible"
+            app:layout_constraintStart_toEndOf="@+id/textView7"
+            app:layout_constraintTop_toBottomOf="@+id/read_cnt" />
+
+        <Spinner
+            android:id="@+id/unit"
+            android:layout_width="163dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="4dp"
+            app:layout_constraintStart_toEndOf="@+id/textView6"
+            app:layout_constraintTop_toBottomOf="@+id/ad_sleep" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+    <Button
+        android:id="@+id/send_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="5dp"
+        android:text="Save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button4"
+        app:layout_constraintHorizontal_bias="0.191"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/thirdconst" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="64dp"
+        android:layout_marginBottom="5dp"
+        android:text="Cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/thirdconst" />
+
+
+</android.support.constraint.ConstraintLayout>
