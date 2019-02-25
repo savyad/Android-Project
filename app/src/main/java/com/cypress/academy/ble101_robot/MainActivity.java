@@ -9,19 +9,48 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+
+import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
 import com.opencsv.CSVWriter;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,12 +63,15 @@ public class MainActivity extends AppCompatActivity {
 
     private static BluetoothAdapter mBluetoothAdapter;
     private static BluetoothLeScanner mLEScanner;
+    public JSONObject main = new JSONObject();
+    public JSONArray main_arr = new JSONArray();
+    public TextView js;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
+        js=(TextView)findViewById(R.id.json);
+        js.setMovementMethod(new ScrollingMovementMethod());
 
 
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
@@ -131,8 +163,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void startMain (View view) throws Exception
-    {
+    public void startMain (View view) throws Exception {
        /* File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString());
         File file1 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/files123");
         File file2 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/files123/data.csv");
@@ -156,11 +187,128 @@ public class MainActivity extends AppCompatActivity {
             Log.d("Files", "FileName:" + files[i].getName());
         }*/
         //Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        Intent intent = new Intent(this, ScanActivity.class);
+        //Intent intent = new Intent(this, ScanActivity.class);
         //EditText editText = (EditText) findViewById(R.id.editText);
         //String message = editText.getText().toString();
         //boolean startScan = true;
-       //intent.putExtra("scan_flag",startScan);
-        startActivity(intent);
+        //intent.putExtra("scan_flag",startScan);
+        //startActivity(intent);
+        File input = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/files123/MIIGO.csv");
+        //File output = new File("/x/data.json");
+        Reader in = new FileReader(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/files123/MIIGO.csv");
+
+        //  CSVReader reader = new CSVReaderBuilder(IOUtils.toBufferedReader(in))
+        //         .withCSVParser(new CSVParserBuilder().withSeparator(',').build()).build();
+        //new CSVReader(new FileReader(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/files123/MIIGO.csv"),',');
+
+        //CSVReader reader2 = new CSVReader(new InputStreamReader(getAssets().open(input.toString())));
+
+        CSVReader reader = new CSVReader(in);
+        CSVReader csvReader = new CSVReaderBuilder(in).withSkipLines(1).build();
+        String[] headers;
+        String[] data;
+        headers = reader.readNext();
+        int i,j;
+        int size = headers.length;
+
+      //  List<String[]> myData =csvReader.readAll();
+
+       // for(i=0;i<headers.length-1;i++)
+      //  {
+       //     j=i;
+            //Log.d("header",String.valueOf(i));
+        /*for ( i = 0; i < headers.length; i++)
+        {
+
+            main.put(headers[i],main_arr);
+
+        }*/
+            while ((data = csvReader.readNext()) != null)
+            {
+
+                main.put(headers[0],main_arr.put(data[0]));
+
+                main.put("ch1",main_arr.put(data[1]));
+                //main.put(headers[2],main_arr.put(data[2]));
+                //main.put(headers[1],main_arr.put(data[1]));
+
+                System.out.print(String.valueOf(headers[0]));
+
+
+
+                //main.put(headers[i],main_arr);
+                //Log.d("header",String.valueOf(i));
+            }
+
+       // }
+
+        /*while ((data = csvReader.readNext()) != null)
+        {
+
+            //main.put(headers[i],main_arr);
+            Log.d("header",data[0]);
+        }*/
+
+       js.setText(main.toString());
+        // System.out.println(main.toString(4));
+
+
+        /*while ((line = reader.readNext()) != null)
+        {
+
+           Log.d("header",line[0]);
+        }*/
+
+        //Log.d("header",String.valueOf(line.length));
+
+        /*FileInputStream fis = new FileInputStream(input);
+
+        InputStreamReader isr = new InputStreamReader(fis);
+        BufferedReader bufferedReader = new BufferedReader(isr);
+        StringBuilder sb = new StringBuilder();
+        String line;
+
+        while ((line = bufferedReader.readLine()) != null)
+        {
+            sb.append(line);
+        }*/
+
+        //Log.d("headers",sb.toString());
+        //String[] nextLine;
+        //nextLine = reader2.readNext();
+
+       /* while ((nextLine = reader.readNext()) != null)
+        {
+
+            System.out.println(nextLine[1]);
+        }*/
+
+
+        //List<Map<?, ?>> data = readObjectsFromCsv(input);
+        //Log.d("record",data.toString());
+        //writeAsJson(data, input);
+
+
+
+
+       /* Reader in = new FileReader(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/files123/MIIGO.csv");
+        CSVParser parser = new CSVParser(in, CSVFormat.EXCEL);
+        List<CSVRecord> csvRecords = parser.getRecords();
+        Log.d("record",csvRecords.toString());*/
+    }
+
+    public static List<Map<?, ?>> readObjectsFromCsv(File file) throws IOException {
+        CsvSchema bootstrap = CsvSchema.emptySchema().withHeader();
+        CsvMapper csvMapper = new CsvMapper();
+        MappingIterator<Map<?, ?>> mappingIterator = csvMapper.reader(Map.class).with(bootstrap).readValues(file);
+        return mappingIterator.readAll();
+    }
+
+    public static void writeAsJson(List<Map<?, ?>> data, File file) throws IOException
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        String dataa="";
+        mapper.writeValue(file, dataa);
+        Log.d("json",dataa);
     }
 }

@@ -23,13 +23,21 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonObject;
+import com.opencsv.CSVWriter;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.csv.CSVParser;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -52,6 +60,7 @@ public class DownloadCsv extends AppCompatActivity {
     public String mDeviceAddress,mDeviceName;
     public BluetoothGattCharacteristic characteristic;
     public JSONObject dnc;
+    public TextView dstat;
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
@@ -88,6 +97,7 @@ public class DownloadCsv extends AppCompatActivity {
         mDeviceAddress = intent.getStringExtra(EXTRAS_BLE_ADDRESS);
 
 
+        dstat=(TextView)findViewById(R.id.d_stat);
         dncb=(Button)findViewById(R.id.dnc);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
@@ -120,6 +130,7 @@ public class DownloadCsv extends AppCompatActivity {
         });
 
         dncb.setOnClickListener(click);
+        Log.d("name",mDeviceName);
 
     }
     @Override
@@ -305,7 +316,49 @@ public class DownloadCsv extends AppCompatActivity {
     public void readCsv(String data)
     {
        //data=data.replaceAll("\\r",System.lineSeparator());
-        System.out.print(data);
+        Log.d("csv data",data);
+        if(data.contains("END"))
+        {
+            data.replace("END"," ");
+
+            dstat.setText("DownLoad Completed...");
+
+            File file2 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/files123/"+mDeviceName+".csv");
+
+            try
+            {
+                if(!file2.exists())
+                {
+                    if(file2.createNewFile()) {
+                        FileWriter mwriter = new FileWriter(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/files123/"+mDeviceName+".csv",false);
+                        CSVWriter csvwrite = new CSVWriter(mwriter, CSVWriter.DEFAULT_SEPARATOR,
+                                CSVWriter.NO_QUOTE_CHARACTER,
+                                CSVWriter.NO_ESCAPE_CHARACTER, "\n");
+                        String[] rec = new String[1];// = {"datetime,ch1,ch2,\n2019-11-22 23:11:22,22,11,\n2019-11-22 23:11:22,22,11"};
+                        rec[0] = data;//"datetime,ch1,ch2,\n2019-11-22 23:11:22,22,11,\n2019-11-22 23:11:22,22,11";
+                        csvwrite.writeNext(rec);
+                        csvwrite.close();
+                    }
+                }
+                else
+                {
+                    FileWriter mwriter = new FileWriter(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/files123/"+mDeviceName+".csv",false);
+                    CSVWriter csvwrite = new CSVWriter(mwriter, CSVWriter.DEFAULT_SEPARATOR,
+                            CSVWriter.NO_QUOTE_CHARACTER,
+                            CSVWriter.NO_ESCAPE_CHARACTER, "\n");
+                    String[] rec = new String[1];// = {"datetime,ch1,ch2,\n2019-11-22 23:11:22,22,11,\n2019-11-22 23:11:22,22,11"};
+                    rec[0] = data;//"datetime,ch1,ch2,\n2019-11-22 23:11:22,22,11,\n2019-11-22 23:11:22,22,11";
+                    csvwrite.writeNext(rec);
+                    csvwrite.close();
+                }
+            }
+            catch(Exception e)
+            {
+
+                e.printStackTrace();
+            }
+
+        }
 
     }
 
@@ -347,7 +400,10 @@ public class DownloadCsv extends AppCompatActivity {
 
                     if(mBleService!=null)
                     {
-                       try{
+
+                       try
+                       {
+                            dstat.setText("DownLoad Started....");
                            dnc.put("type","dnc");
                            sendbyMTUlimit(dnc.toString(),characteristic);
                        } catch(Exception e)
