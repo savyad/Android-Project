@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    >
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/low_text"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="9dp"
+            android:layout_toStartOf="@+id/low_val"
+            android:text="Low:"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/low_val"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:inputType="numberSigned|numberDecimal"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="86dp"
+            android:ems="10"
+            />
+
+        <TextView
+            android:id="@+id/high_text"
+            android:layout_width="53dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="64dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toStartOf="@+id/high_val"
+            android:text="High:"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/high_val"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="64dp"
+            android:layout_marginEnd="85dp"
+            android:ems="10"
+            android:inputType="numberSigned|numberDecimal"
+            />
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>
