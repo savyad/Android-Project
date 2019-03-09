@@ -12,6 +12,7 @@ import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -32,7 +33,7 @@ public class ConfigurationView extends AppCompatActivity {
     public BluetoothGattCharacteristic characteristic;
 
     public String mDeviceAddress,mDeviceName;
-    public Button devinfo,devset,downcsv;
+    public Button devinfo,devset,downcsv,devcali,devgrpah;
     private boolean mConnected = true;
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -76,11 +77,14 @@ public class ConfigurationView extends AppCompatActivity {
         devinfo=(Button)findViewById(R.id.dev_info);
         devset=(Button)findViewById(R.id.sen_setup);
         downcsv=(Button)findViewById(R.id.down);
+        devcali=(Button)findViewById(R.id.sen_calibra);
+        devgrpah=(Button)findViewById(R.id.graph);
 
         devinfo.setOnClickListener(click);
         devset.setOnClickListener(click);
         downcsv.setOnClickListener(click);
-
+        devcali.setOnClickListener(click);
+        devgrpah.setOnClickListener(click);
 
     }
 
@@ -88,7 +92,7 @@ public class ConfigurationView extends AppCompatActivity {
     protected void onResume()
     {
         super.onResume();
-        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        LocalBroadcastManager.getInstance(this).registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
         if (mBleService != null) {
             final boolean result = mBleService.connect(mDeviceAddress);
             Log.d("aa", "Connect request result=" + result);
@@ -102,7 +106,7 @@ public class ConfigurationView extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(mGattUpdateReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mGattUpdateReceiver);
     }
     @Override
     protected void onDestroy() {
@@ -233,6 +237,31 @@ public class ConfigurationView extends AppCompatActivity {
                         // Stop scanning
                         startActivity(intent);
                     }
+                    break;
+                case R.id.sen_calibra:
+                    if(mBleService!=null)
+                    {
+                        final Intent intent = new Intent(ConfigurationView.this, SensorCalibrate.class);
+
+                        intent.putExtra(EXTRAS_BLE_ADDRESS,mDeviceAddress);
+                        intent.putExtra(EXTRAS_BLE_NAME,mDeviceName);
+                        //mBluetoothDevice.get(position).createBond();
+                        // Stop scanning
+                        startActivity(intent);
+                    }
+                    break;
+                case R.id.graph:
+                    if(mBleService!=null)
+                    {
+                        final Intent intent = new Intent(ConfigurationView.this, DeviceSettings.class);
+
+                        intent.putExtra(EXTRAS_BLE_ADDRESS,mDeviceAddress);
+                        intent.putExtra(EXTRAS_BLE_NAME,mDeviceName);
+                        //mBluetoothDevice.get(position).createBond();
+                        // Stop scanning
+                        startActivity(intent);
+                    }
+                    break;
                     default:
                         break;
 
