@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#435153"
+    android:background="#0f413d"
     tools:context=".SensorSetup">
 
     <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -29,16 +29,13 @@
             app:layout_constraintTop_toTopOf="@id/constraint" />
 
         <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/log_inter"
+            android:layout_width="147dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="2dp"
             android:layout_marginTop="60dp"
-            android:layout_marginBottom="13dp"
-            android:entries="@array/item"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView14"
-            app:layout_constraintTop_toTopOf="@id/constraint"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="@id/constraint" />
 
         <TextView
             android:id="@+id/textView17"
@@ -73,25 +70,25 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <Spinner
-            android:id="@+id/spinner3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:entries="@array/item"
+            android:id="@+id/sam_rate"
+            android:layout_width="147dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="14dp"
             app:layout_constraintStart_toEndOf="@+id/textView18"
-            app:layout_constraintTop_toBottomOf="@+id/spinner2" />
+            app:layout_constraintTop_toBottomOf="@+id/log_method" />
 
         <Spinner
             android:id="@+id/spinner4"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="22dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="13dp"
             android:layout_marginEnd="16dp"
             android:entries="@array/item"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView18" />
+            app:layout_constraintTop_toBottomOf="@+id/sam_rate" />
 
         <!--<fragment
             android:name="com.cypress.academy.ble101_robot.SettingFragment"
@@ -138,13 +135,25 @@
 
 
         <Spinner
-            android:id="@+id/spinner2"
+            android:id="@+id/log_method"
+            android:layout_width="147dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="14dp"
+            app:layout_constraintStart_toEndOf="@+id/textView17"
+            app:layout_constraintTop_toBottomOf="@+id/log_inter" />
+
+        <Button
+            android:id="@+id/btt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="307dp"
             android:layout_marginTop="12dp"
-            android:entries="@array/item"
-            app:layout_constraintStart_toEndOf="@+id/textView17"
-            app:layout_constraintTop_toBottomOf="@+id/spinner" />
+            android:layout_marginEnd="16dp"
+            android:text="Button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
         <!--<android.support.v4.view.ViewPager
             android:id="@+id/container"
             android:layout_width="match_parent"

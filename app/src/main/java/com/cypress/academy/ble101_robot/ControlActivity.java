@@ -14,6 +14,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -88,7 +89,7 @@ public class ControlActivity extends AppCompatActivity {
     public Button calibrate,send;
     public EditText dev_name,op_name,adv;
 
-    public Boolean init;
+    public Boolean init=true;
     private boolean mConnected = false;
     Spinner  log_trigger,recordM,unitms;
 
@@ -135,7 +136,7 @@ public class ControlActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_BLE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_BLE_ADDRESS);
-        init=true;
+        //init=true;
         ref=new JSONObject();
         mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ", Locale.getDefault());
         //mConnectionState = (TextView) findViewById(R.id.textView);
@@ -317,7 +318,7 @@ public class ControlActivity extends AppCompatActivity {
     protected void onResume()
     {
         super.onResume();
-        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        LocalBroadcastManager.getInstance(this).registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
         if (mBleService != null) {
             final boolean result = mBleService.connect(mDeviceAddress);
             Log.d("aa", "Connect request result=" + result);
@@ -333,7 +334,7 @@ public class ControlActivity extends AppCompatActivity {
         {
             mBleService.buffer = "";
         }
-        unregisterReceiver(mGattUpdateReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mGattUpdateReceiver);
     }
 
     @Override
@@ -552,7 +553,7 @@ public class ControlActivity extends AppCompatActivity {
             try
             {
                 JSONObject read_json = new JSONObject(data);
-
+                log_trigger.setSelection(0,false);
                 //String prop = read_json.getString("property");
                 //String models = read_json.getString("model_no");
                 String dev_nmv = read_json.getString("dev_name");
@@ -599,7 +600,8 @@ public class ControlActivity extends AppCompatActivity {
                 supp_p.setText(supp);
                 if(log_triv==0)
                 {
-                    log_trigger.setSelection(getIndex(log_trigger,logtrigger,String.valueOf(log_triv)));
+                    log_trigger.setSelection(getIndex(log_trigger,logtrigger,String.valueOf(log_triv)),false);
+                    //log_trigger.setSelection(0,false);
                 }
                 else if(log_triv==1)
                 {

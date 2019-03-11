@@ -109,7 +109,8 @@ public class ConfigurationView extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mGattUpdateReceiver);
     }
     @Override
-    protected void onDestroy() {
+    protected void onDestroy()
+    {
         super.onDestroy();
         unbindService(mServiceConnection);
         mBleService.buffer="";

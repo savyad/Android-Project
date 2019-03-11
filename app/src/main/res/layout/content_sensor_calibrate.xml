@@ -19,28 +19,27 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="27dp"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="17dp"
             android:layout_marginBottom="62dp"
             android:text="Set Cali. Range"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView32" />
 
         <EditText
-            android:id="@+id/ch2_name2"
+            android:id="@+id/gain_ch2"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="10dp"
             android:background="#55252424"
             android:ems="10"
-            android:inputType="textPersonName"
+            android:inputType="none"
+            android:enabled="false"
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
             android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@+id/textView32"
-            app:layout_constraintTop_toBottomOf="@+id/ch2_name" />
+            app:layout_constraintTop_toBottomOf="@+id/off_ch2" />
 
         <EditText
             android:id="@+id/gain_ch1"
@@ -50,7 +49,9 @@
             android:layout_marginTop="10dp"
             android:background="#55252424"
             android:ems="10"
-            android:inputType="textPersonName"
+            android:inputType="none"
+            android:enabled="false"
+
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
             android:textSize="14sp"
@@ -72,14 +73,15 @@
             app:layout_constraintTop_toBottomOf="@+id/textView30" />
 
         <EditText
-            android:id="@+id/ch2_name"
+            android:id="@+id/off_ch2"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="15dp"
             android:background="#55252424"
             android:ems="10"
-            android:inputType="textPersonName"
+            android:inputType="none"
+            android:enabled="false"
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
             android:textSize="14sp"
@@ -122,7 +124,8 @@
             android:layout_marginTop="15dp"
             android:background="#55252424"
             android:ems="10"
-            android:inputType="textPersonName"
+            android:inputType="none"
+            android:enabled="false"
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
             android:textSize="14sp"
@@ -181,9 +184,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="27dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="10dp"
             android:text="Set Cali. Range"
-            app:layout_constraintEnd_toStartOf="@+id/calibrate_ch1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView23" />
 
@@ -191,21 +192,25 @@
             android:id="@+id/calibrate_ch1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="100dp"
             android:text=" Calibrate ch1"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/set_cali_range_ch1"
             app:layout_constraintTop_toBottomOf="@+id/gain_ch1" />
 
         <Button
-            android:id="@+id/button5"
+            android:id="@+id/calibrate_ch2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="23dp"
             android:layout_marginEnd="102dp"
             android:text="Calibrate ch2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ch2_name2" />
+            app:layout_constraintStart_toEndOf="@+id/set_cali_range_ch2"
+            app:layout_constraintTop_toBottomOf="@+id/gain_ch2" />
 
 
     </android.support.constraint.ConstraintLayout>

@@ -7,7 +7,7 @@
     android:id="@+id/main_constr"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#435153"
+    android:background="#0f413d"
     tools:context=".ControlActivity">
 
 
@@ -159,13 +159,13 @@
             app:layout_constraintTop_toBottomOf="@+id/rec_mode" />
 
 
-        <Spinner
+        <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/log_trigger"
             android:layout_width="111dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="8dp"
-
+            android:backgroundTint="#ae2727"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -191,7 +191,7 @@
             android:layout_width="147dp"
             android:layout_height="25dp"
             android:layout_marginStart="22dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="25dp"
             android:background="#f9c2c2c2"
             android:text="Device Name"
             android:textAlignment="viewStart"
@@ -204,11 +204,12 @@
             android:id="@+id/dev_name"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="25dp"
             android:layout_marginEnd="8dp"
             android:background="#55252424"
             android:ems="10"
             android:inputType="textPersonName"
+            android:maxLength="6"
             android:text="sasss"
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
@@ -243,6 +244,7 @@
             android:inputType="textPersonName|textFilter"
             android:text="Opert. Name"
             android:textAlignment="center"
+            android:maxLength="6"
             android:textColor="@android:color/background_light"
             android:textCursorDrawable="@drawable/cursor_col"
             android:textSize="12sp"
@@ -449,20 +451,24 @@
             app:layout_constraintStart_toEndOf="@+id/textView"
             app:layout_constraintTop_toBottomOf="@+id/op_name" />
 
-        <Spinner
+        <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/rec_mode"
             android:layout_width="147dp"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="7dp"
+            android:backgroundTint="#ae2727"
             android:visibility="visible"
             app:layout_constraintStart_toEndOf="@+id/textView7"
             app:layout_constraintTop_toBottomOf="@+id/read_cnt" />
 
-        <Spinner
+        <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/unit"
             android:layout_width="163dp"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:layout_marginStart="4dp"
+            android:backgroundTint="#ae2727"
+            android:layout_marginTop="7dp"
             app:layout_constraintStart_toEndOf="@+id/textView6"
             app:layout_constraintTop_toBottomOf="@+id/ad_sleep" />
 
@@ -471,12 +477,15 @@
 
     <Button
         android:id="@+id/send_setting"
-        android:layout_width="wrap_content"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="9dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/spinner_border"
+        android:backgroundTint="#a33a3a"
         android:text="Save"
+        android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button4"
         app:layout_constraintHorizontal_bias="0.191"
@@ -485,11 +494,14 @@
 
     <Button
         android:id="@+id/button4"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="64dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="21dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/spinner_border"
+        android:backgroundTint="#484343"
         android:text="Cancel"
+        android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/thirdconst" />

@@ -1,13 +1,10 @@
 package com.cypress.academy.ble101_robot;
 
-import android.content.Context;
-import android.net.Uri;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,24 +12,84 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.support.v4.app.FragmentManager;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.TextView;
 
-public class SettingFragment extends Fragment {
+import com.google.gson.JsonObject;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.nio.charset.CharacterCodingException;
+
+public class SettingFragment extends Fragment
+{
     public ViewPager viewPager;
     public ViewPagerAdapter viewPagerAdapter;
     public EditText dd;
     public String ssas;
+    public Button snd;
+
+    public EditText ch1_name,ch1_rang,ch1_offse,ch1_gain;
+    public CheckBox ch1_1_enb,ch1_2_enb,ch1_3_enb,ch1_4_enb;
+    public EditText ch1_1_setpoint,ch1_2_setpoint,ch1_3_setpoint,ch1_4_setpoint;
+    public Spinner ch1_1_judge,ch1_2_judge,ch1_3_judge,ch1_4_judge;
+    public Switch ch1_1_hyst,ch1_2_hyst,ch1_3_hyst,ch1_4_hyst;
+    public TextView ch1_H,ch1_L,ch1_HH,ch1_LL;
+
+    public EditText ch2_name,ch2_rang,ch2_offse,ch2_gain;
+    public CheckBox ch2_1_enb,ch2_2_enb,ch2_3_enb,ch2_4_enb;
+    public EditText ch2_1_setpoint,ch2_2_setpoint,ch2_3_setpoint,ch2_4_setpoint;
+    public Spinner ch2_1_judge,ch2_2_judge,ch2_3_judge,ch2_4_judge;
+    public Switch ch2_1_hyst,ch2_2_hyst,ch2_3_hyst,ch2_4_hyst;
+    public TextView ch2_H,ch2_L,ch2_HH,ch2_LL;
+
+
+
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+
+
     public LinearLayout contain;
     Bundle savedArgs = new Bundle();
+
+
+
+    public interface onSomeEventListener
+    {
+
+        public void someEvent(String s);
+    }
+
+    onSomeEventListener someEventListener;
+
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    @SuppressWarnings("deprecation")
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            someEventListener = (onSomeEventListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement onSomeEventListener");
+        }
+    }
+
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        if (getArguments() != null)
+        {
             ssas = getArguments().getString("text");
         }
 
@@ -51,8 +108,74 @@ public class SettingFragment extends Fragment {
         //contain = (LinearLayout) retView.findViewById(R.id.fragment_container);
 
 
-        dd=(EditText)retView.findViewById(R.id.ch1_name);
-        dd.setText(ssas);
+        //dd=(EditText)retView.findViewById(R.id.off_ch1);
+        snd=(Button)retView.findViewById(R.id.save_bt);
+
+        ch1_name=(EditText)retView.findViewById(R.id.off_ch1);
+        ch1_rang=(EditText)retView.findViewById(R.id.ch1_range);
+        ch1_offse=(EditText)retView.findViewById(R.id.ch1_offset);
+        ch1_gain=(EditText)retView.findViewById(R.id.ch1_gain);
+
+        ch1_1_enb=(CheckBox)retView.findViewById(R.id.ch1_1_enb);
+        ch1_2_enb=(CheckBox)retView.findViewById(R.id.ch1_2_enb);
+        ch1_3_enb=(CheckBox)retView.findViewById(R.id.ch1_3_enb);
+        ch1_4_enb=(CheckBox)retView.findViewById(R.id.ch1_4_enb);
+
+        ch1_1_setpoint=(EditText)retView.findViewById(R.id.ch1_1_setpoint);
+        ch1_2_setpoint=(EditText)retView.findViewById(R.id.ch1_2_setpoint);
+        ch1_3_setpoint=(EditText)retView.findViewById(R.id.ch1_3_setpoint);
+        ch1_4_setpoint=(EditText)retView.findViewById(R.id.ch1_4_setpoint);
+
+        ch1_1_judge=(Spinner) retView.findViewById(R.id.ch1_1_judge);
+        ch1_2_judge=(Spinner)retView.findViewById(R.id.ch1_2_judge);
+        ch1_3_judge=(Spinner)retView.findViewById(R.id.ch1_3_judge);
+        ch1_4_judge=(Spinner)retView.findViewById(R.id.ch1_4_judge);
+
+        ch1_1_hyst=(Switch)retView.findViewById(R.id.ch1_1_hyst);
+        ch1_2_hyst=(Switch)retView.findViewById(R.id.ch1_2_hyst);
+        ch1_3_hyst=(Switch)retView.findViewById(R.id.ch1_3_hyst);
+        ch1_4_hyst=(Switch)retView.findViewById(R.id.ch1_4_hyst);
+
+        ch1_H=(TextView)retView.findViewById(R.id.ch1_H);
+        ch1_L=(TextView)retView.findViewById(R.id.ch1_L);
+        ch1_HH=(TextView)retView.findViewById(R.id.ch1_HH);
+        ch1_LL=(TextView)retView.findViewById(R.id.ch1_LL);
+
+        ch2_name=(EditText)retView.findViewById(R.id.off_ch2);
+        ch2_rang=(EditText)retView.findViewById(R.id.ch2_range);
+        ch2_offse=(EditText)retView.findViewById(R.id.ch2_offset);
+        ch2_gain=(EditText)retView.findViewById(R.id.ch2_gain);
+
+        ch2_1_enb=(CheckBox)retView.findViewById(R.id.ch2_1_enb);
+        ch2_2_enb=(CheckBox)retView.findViewById(R.id.ch2_2_enb);
+        ch2_3_enb=(CheckBox)retView.findViewById(R.id.ch2_3_enb);
+        ch2_4_enb=(CheckBox)retView.findViewById(R.id.ch2_4_enb);
+
+        ch2_1_setpoint=(EditText)retView.findViewById(R.id.ch2_1_setpoint);
+        ch2_2_setpoint=(EditText)retView.findViewById(R.id.ch2_2_setpoint);
+        ch2_3_setpoint=(EditText)retView.findViewById(R.id.ch2_3_setpoint);
+        ch2_4_setpoint=(EditText)retView.findViewById(R.id.ch2_4_setpoint);
+
+        ch2_1_judge=(Spinner) retView.findViewById(R.id.ch2_1_judge);
+        ch2_2_judge=(Spinner)retView.findViewById(R.id.ch2_2_judge);
+        ch2_3_judge=(Spinner)retView.findViewById(R.id.ch2_3_judge);
+        ch2_4_judge=(Spinner)retView.findViewById(R.id.ch2_4_judge);
+
+        ch2_1_hyst=(Switch)retView.findViewById(R.id.ch2_1_hyst);
+        ch2_2_hyst=(Switch)retView.findViewById(R.id.ch2_2_hyst);
+        ch2_3_hyst=(Switch)retView.findViewById(R.id.ch2_3_hyst);
+        ch2_4_hyst=(Switch)retView.findViewById(R.id.ch2_4_hyst);
+
+        ch2_H=(TextView)retView.findViewById(R.id.ch2_H);
+        ch2_L=(TextView)retView.findViewById(R.id.ch2_L);
+        ch2_HH=(TextView)retView.findViewById(R.id.ch2_HH);
+        ch2_LL=(TextView)retView.findViewById(R.id.ch2_LL);
+
+        //dd.setText(ssas);
+
+
+        snd.setOnClickListener(click);
+
         //Log.d("data",dd.getText().toString());
         /*TabLayout tabLayout = (TabLayout) retView.findViewById(R.id.tab);
 
@@ -120,6 +243,137 @@ public class SettingFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
+
+
+
+    private View.OnClickListener click =new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+            switch (view.getId())
+            {
+                case R.id.save_bt:
+
+
+
+                    JSONObject main = new JSONObject();
+                    JSONObject obj_ch1 = new JSONObject();
+                    JSONObject obj_ch2 = new JSONObject();
+                    JSONArray events = new JSONArray();
+                    JSONObject temp = new JSONObject();
+                    try
+                    {
+                        //object 1 inintialization i.e ch1
+                        obj_ch1.put("nm",ch1_name.getText().toString());
+                        obj_ch1.put("mu",ch1_name.getText().toString());
+                        obj_ch1.put("range",ch1_rang.getText().toString());
+                        obj_ch1.put("ofs",ch1_offse.getText().toString());
+                        obj_ch1.put("gn",ch1_gain.getText().toString());
+
+                        temp.put("enb",ch1_1_enb.isChecked());
+                        temp.put("typ",ch1_H.getText());
+                        temp.put("stp",Double.valueOf(ch1_1_setpoint.getText().toString()));
+                        temp.put("jud",Integer.valueOf("200"));//unit[unitms.getSelectedItemPosition()].getValue()
+                        temp.put("hst",ch1_1_hyst.isChecked());
+
+                        events.put(temp);
+                        temp=new JSONObject();
+
+                        temp.put("enb",ch1_2_enb.isChecked());
+                        temp.put("typ",ch1_L.getText());
+                        temp.put("stp",Double.valueOf(ch1_2_setpoint.getText().toString()));
+                        temp.put("jud",Integer.valueOf("200"));//unit[unitms.getSelectedItemPosition()].getValue()
+                        temp.put("hst",ch1_2_hyst.isChecked());
+
+                        events.put(temp);
+
+                        temp=new JSONObject();
+
+                        temp.put("enb",ch1_3_enb.isChecked());
+                        temp.put("typ",ch1_HH.getText());
+                        temp.put("stp",Double.valueOf(ch1_3_setpoint.getText().toString()));
+                        temp.put("jud",Integer.valueOf("200"));//unit[unitms.getSelectedItemPosition()].getValue()
+                        temp.put("hst",ch1_3_hyst.isChecked());
+
+                        events.put(temp);
+
+                        temp=new JSONObject();
+
+                        temp.put("enb",ch1_4_enb.isChecked());
+                        temp.put("typ",ch1_LL.getText());
+                        temp.put("stp",Double.valueOf(ch1_4_setpoint.getText().toString()));
+                        temp.put("jud",Integer.valueOf("200"));//unit[unitms.getSelectedItemPosition()].getValue()
+                        temp.put("hst",ch1_4_hyst.isChecked());
+
+                        events.put(temp);
+                        obj_ch1.put("events",events);
+                        events = new JSONArray();
+                        temp= new JSONObject();
+                        //*******////
+
+                        //obj2 initialization i.e ch2/////
+
+
+                        obj_ch2.put("nm",ch2_name.getText().toString());
+                        obj_ch2.put("mu",ch2_name.getText().toString());
+                        obj_ch2.put("range",ch2_rang.getText().toString());
+                        obj_ch2.put("ofs",ch2_offse.getText().toString());
+                        obj_ch2.put("gn",ch2_gain.getText().toString());
+
+                        temp.put("enb",ch2_1_enb.isChecked());
+                        temp.put("typ",ch2_H.getText());
+                        temp.put("stp",Double.valueOf(ch2_1_setpoint.getText().toString()));
+                        temp.put("jud",Integer.valueOf("200"));//unit[unitms.getSelectedItemPosition()].getValue()
+                        temp.put("hst",ch2_1_hyst.isChecked());
+
+                        events.put(temp);
+                        temp=new JSONObject();
+
+                        temp.put("enb",ch2_2_enb.isChecked());
+                        temp.put("typ",ch2_L.getText());
+                        temp.put("stp",Double.valueOf(ch2_2_setpoint.getText().toString()));
+                        temp.put("jud",Integer.valueOf("200"));//unit[unitms.getSelectedItemPosition()].getValue()
+                        temp.put("hst",ch2_2_hyst.isChecked());
+
+                        events.put(temp);
+
+                        temp=new JSONObject();
+
+                        temp.put("enb",ch2_3_enb.isChecked());
+                        temp.put("typ",ch2_HH.getText());
+                        temp.put("stp",Double.valueOf(ch2_3_setpoint.getText().toString()));
+                        temp.put("jud",Integer.valueOf("200"));//unit[unitms.getSelectedItemPosition()].getValue()
+                        temp.put("hst",ch2_3_hyst.isChecked());
+
+                        events.put(temp);
+
+                        temp=new JSONObject();
+
+                        temp.put("enb",ch2_4_enb.isChecked());
+                        temp.put("typ",ch2_LL.getText());
+                        temp.put("stp",Double.valueOf(ch2_4_setpoint.getText().toString()));
+                        temp.put("jud",Integer.valueOf("200"));//unit[unitms.getSelectedItemPosition()].getValue()
+                        temp.put("hst",ch2_4_hyst.isChecked());
+
+                        events.put(temp);
+                        obj_ch2.put("events",events);
+
+
+
+                       /* main.put("ch1",obj_ch1);
+                        main.put("ch2",obj_ch2);*/
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+
+                    someEventListener.someEvent(obj_ch1.toString()+"xxc"+obj_ch2.toString());
+                    break;
+            }
+
+        }
+    };
 
 /*
     private SectionsPageAdapter mSectionsPageAdapter;

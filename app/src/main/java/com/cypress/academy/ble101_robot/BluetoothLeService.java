@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -130,7 +131,8 @@ public class BluetoothLeService extends Service {
 
     private void broadcastUpdate(final String action) {
         final Intent intent = new Intent(action);
-        sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+        //sendBroadcast(intent);
     }
 
     private void broadcastUpdate(final String action,
@@ -176,7 +178,7 @@ public class BluetoothLeService extends Service {
                 intent.putExtra(EXTRA_DATA, new String(adata) + "\n" + stringBuilder.toString());
             }
         }*/
-        sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
     public static String bytesToHex(byte[] bytes) {
         StringBuilder builder = new StringBuilder();
@@ -187,7 +189,8 @@ public class BluetoothLeService extends Service {
 
     }
     public class LocalBinder extends Binder {
-        BluetoothLeService getService() {
+        BluetoothLeService getService()
+        {
             return BluetoothLeService.this;
         }
     }

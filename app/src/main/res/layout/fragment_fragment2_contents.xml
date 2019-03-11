@@ -6,7 +6,7 @@
 
 
     <EditText
-        android:id="@+id/ch1_name"
+        android:id="@+id/off_ch1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -21,7 +21,7 @@
         android:id="@+id/ch1_munit"
         android:layout_width="339dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ch1_name"
+        android:layout_below="@+id/off_ch1"
         android:layout_alignParentStart="true"
         android:layout_marginStart="16dp"
         android:layout_marginTop="13dp" />

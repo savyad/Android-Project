@@ -33,6 +33,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.CSVWriter;
 
+import org.apache.commons.collections.iterators.IteratorEnumeration;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -48,6 +49,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -137,16 +139,21 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_REQUEST_COARSE_LOCATION: {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
                     Log.i("Permission for 6.0:", "Coarse location permission granted");
-                } else {
+                }
+                else
+                    {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle("Error");
                     builder.setMessage("Since location access has not been granted, scanning will not work.");
                     builder.setPositiveButton(android.R.string.ok, null);
                     builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
-                        public void onDismiss(DialogInterface dialog) {
+                        public void onDismiss(DialogInterface dialog)
+                        {
+
                         }
                     });
                     builder.show();
@@ -163,7 +170,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void startMain (View view) throws Exception {
+    public void startMain (View view) throws Exception
+    {
        /* File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString());
         File file1 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/files123");
         File file2 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/files123/data.csv");
@@ -187,15 +195,15 @@ public class MainActivity extends AppCompatActivity {
             Log.d("Files", "FileName:" + files[i].getName());
         }*/
         //Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        //Intent intent = new Intent(this, ScanActivity.class);
+        Intent intent = new Intent(this, ScanActivity.class);
         //EditText editText = (EditText) findViewById(R.id.editText);
         //String message = editText.getText().toString();
         //boolean startScan = true;
         //intent.putExtra("scan_flag",startScan);
-        //startActivity(intent);
-        File input = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/files123/MIIGO.csv");
+        startActivity(intent);
+       // File input = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/files123/MIIGO.csv");
         //File output = new File("/x/data.json");
-        Reader in = new FileReader(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/files123/MIIGO.csv");
+       // Reader in = new FileReader(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/files123/MIIGO.csv");
 
         //  CSVReader reader = new CSVReaderBuilder(IOUtils.toBufferedReader(in))
         //         .withCSVParser(new CSVParserBuilder().withSeparator(',').build()).build();
@@ -203,42 +211,84 @@ public class MainActivity extends AppCompatActivity {
 
         //CSVReader reader2 = new CSVReader(new InputStreamReader(getAssets().open(input.toString())));
 
-        CSVReader reader = new CSVReader(in);
-        CSVReader csvReader = new CSVReaderBuilder(in).withSkipLines(1).build();
+       // CSVReader reader = new CSVReader(in);
+       // CSVReader csvReader = new CSVReaderBuilder(in).withSkipLines(1).build();
         String[] headers;
         String[] data;
-        headers = reader.readNext();
-        int i,j;
-        int size = headers.length;
+    //    headers = reader.readNext();
+    //  List<String[]> myData =csvReader.readAll();
+    //    Iterator<String[]> iter = myData.iterator();
+     //   int size = myData.size();
 
-      //  List<String[]> myData =csvReader.readAll();
+      //  int i, j;
 
-       // for(i=0;i<headers.length-1;i++)
+       // for(i = 0;i<headers.length;i++)
       //  {
-       //     j=i;
-            //Log.d("header",String.valueOf(i));
+      ///      main.put(headers[i],main_arr);
+       // }
+        //for(i=0;i<headers.length;i++)
+        //{
+           // for(i=0;i<headers.length;i++)
+          //  {
+              //  StringBuilder b2 = new StringBuilder();
+              //  while (iter.hasNext())
+              //  {
+              //      String[] record = iter.next();
+               //     for(j=0;j<record.length;j++)
+                //    {
+                       // b2.append(record[j]+",");
+               //     }
+                //    b2.append("\n");
+
+                    /*JSONArray arr = (JSONArray) main.get(headers[i]);
+                    arr.put(record[i]);*/
+
+                    //System.out.println(record[0]);
+
+                   /* for(j=0;j<headers.length;j++)
+                    {
+                        main.getJSONArray(headers[j]).put(record[j]);
+                        System.out.println(record[j]);
+                    }*/
+
+
+                    //main.put(headers[0],main_arr.put(record[0]));
+                    //size--;
+                //}
+
+          //  }
+         //   size=myData.size();
+      //  }
+        //int size = headers.length;
+
+        //  List<String[]> myData =csvReader.readAll();
+
+        // for(i=0;i<headers.length-1;i++)
+        //  {
+        //     j=i;
+        //Log.d("header",String.valueOf(i));
         /*for ( i = 0; i < headers.length; i++)
         {
 
             main.put(headers[i],main_arr);
 
         }*/
-            while ((data = csvReader.readNext()) != null)
-            {
-
-                main.put(headers[0],main_arr.put(data[0]));
-
-                main.put("ch1",main_arr.put(data[1]));
-                //main.put(headers[2],main_arr.put(data[2]));
-                //main.put(headers[1],main_arr.put(data[1]));
-
-                System.out.print(String.valueOf(headers[0]));
+       /* for (i = 0; i < headers.length - 1; i++)
+        {
 
 
+                while ((data = csvReader.readNext()) != null)
+                {
 
-                //main.put(headers[i],main_arr);
-                //Log.d("header",String.valueOf(i));
-            }
+                    main.put(headers[i], main_arr);
+
+
+                    System.out.print(String.valueOf(headers[0]));
+
+
+
+                }
+    }*/
 
        // }
 
@@ -249,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("header",data[0]);
         }*/
 
-       js.setText(main.toString());
+      // js.setText(b2.toString());
         // System.out.println(main.toString(4));
 
 
@@ -295,6 +345,52 @@ public class MainActivity extends AppCompatActivity {
         CSVParser parser = new CSVParser(in, CSVFormat.EXCEL);
         List<CSVRecord> csvRecords = parser.getRecords();
         Log.d("record",csvRecords.toString());*/
+
+        /*String demo = "01fc5c7910B008c515a808c515a808c515a808c515a8aaaa01fb5c7910B0112233221122332211223322";
+        List<String[]> datas = new ArrayList<String[]>();
+        datas.add(new String[] {"datetime","ch1","ch2"});
+        String[] s = demo.split("aaaa");
+        for(int i=0;i<s.length;i++)
+        {
+            String d=s[i];
+            int delay = Integer.parseInt(d.substring(0,4),16);
+            long time = Long.parseLong(d.substring(4,12),16);
+            String dataa = d.substring(12,d.length());
+
+            int k=0;
+            int j=4;
+            while(k!=dataa.length())
+            {
+                int temp = Integer.parseInt(dataa.substring(k,j),16)/100;
+                int humi = Integer.parseInt(dataa.substring(j,j+4),16)/100;
+
+                k=k+8;
+                j=k+4;
+                datas.add(new String[] {String.valueOf(time),String.valueOf(temp),String.valueOf(humi)});
+                time = time + delay;
+
+            }
+
+        }
+        if(datas!=null)
+        {
+            try
+            {
+                File f1=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/files123/check.csv");
+                FileWriter outputfile = new FileWriter(f1,false);
+                CSVWriter writer = new CSVWriter(outputfile);
+                writer.writeAll(datas);
+                writer.close();
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+
+        }*/
+
+
+
     }
 
     public static List<Map<?, ?>> readObjectsFromCsv(File file) throws IOException {

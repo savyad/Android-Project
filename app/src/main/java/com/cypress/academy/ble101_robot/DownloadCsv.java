@@ -1,5 +1,6 @@
 package com.cypress.academy.ble101_robot;
 
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.ActivityNotFoundException;
@@ -15,12 +16,17 @@ import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -52,6 +58,7 @@ import static com.cypress.academy.ble101_robot.Utils.makeGattUpdateIntentFilter;
 public class DownloadCsv extends AppCompatActivity {
 
 
+    private FileNameAdapter mFileNameAdapter;
     public ArrayList filenames ;
     public ArrayAdapter<String> adapter;
     public ListView filelist;
@@ -61,7 +68,7 @@ public class DownloadCsv extends AppCompatActivity {
     public BluetoothGattCharacteristic characteristic;
     public JSONObject dnc;
     public TextView dstat;
-
+    public int cnt=0;
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @Override
@@ -96,16 +103,20 @@ public class DownloadCsv extends AppCompatActivity {
         mDeviceName = intent.getStringExtra(EXTRAS_BLE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_BLE_ADDRESS);
 
-
+        mFileNameAdapter=new FileNameAdapter();
         dstat=(TextView)findViewById(R.id.d_stat);
         dncb=(Button)findViewById(R.id.dnc);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
-        listCsvFiles();
+       listCsvFiles();
+
+
         filelist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                File file2 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/files123/data.csv");
+                File s = mFileNameAdapter.getDevice(i);
+
+                File file2 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/files123/"+s.getName());//data.csv");
                 if (file2.exists())
                 {
                     Intent intent=new Intent(Intent.ACTION_VIEW);
@@ -137,7 +148,7 @@ public class DownloadCsv extends AppCompatActivity {
     protected void onResume()
     {
         super.onResume();
-        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        LocalBroadcastManager.getInstance(this).registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
         if (mBleService != null) {
             final boolean result = mBleService.connect(mDeviceAddress);
             Log.d("aa", "Connect request result=" + result);
@@ -151,7 +162,7 @@ public class DownloadCsv extends AppCompatActivity {
         {
             mBleService.buffer = "";
         }
-        unregisterReceiver(mGattUpdateReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mGattUpdateReceiver);
     }
 
     @Override
@@ -188,7 +199,7 @@ public class DownloadCsv extends AppCompatActivity {
                 // getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 // displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
                 //Log.d("tag",intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
-
+                cnt=cnt+1;
                 readCsv(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
                 //mread.setText("sasassaas");
 
@@ -251,8 +262,8 @@ public class DownloadCsv extends AppCompatActivity {
          //filelist is ListView widget
         filenames = new ArrayList<>();
         getFiles();         //  files funtions
-        adapter=new ArrayAdapter<>(DownloadCsv.this, android.R.layout.simple_list_item_1, filenames);
-        filelist.setAdapter(adapter);
+        //adapter=new ArrayAdapter<File>(DownloadCsv.this, android.R.layout.simple_list_item_1, mFileNameAdapter);
+        filelist.setAdapter(mFileNameAdapter);
 
     }
 
@@ -317,20 +328,21 @@ public class DownloadCsv extends AppCompatActivity {
     {
        //data=data.replaceAll("\\r",System.lineSeparator());
         Log.d("csv data",data);
+        dstat.setText("Data Count..." + String.valueOf(cnt));
         if(data.contains("END"))
         {
-            data.replace("END"," ");
+           data= data.replace("END","");
 
             dstat.setText("DownLoad Completed...");
 
-            File file2 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/files123/"+mDeviceName+".csv");
+            File file2 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/files123/"+mDeviceName.replaceAll(":","")+".csv");
 
             try
             {
                 if(!file2.exists())
                 {
                     if(file2.createNewFile()) {
-                        FileWriter mwriter = new FileWriter(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/files123/"+mDeviceName+".csv",false);
+                        FileWriter mwriter = new FileWriter(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/files123/"+mDeviceAddress.replaceAll(":","")+".csv",false);
                         CSVWriter csvwrite = new CSVWriter(mwriter, CSVWriter.DEFAULT_SEPARATOR,
                                 CSVWriter.NO_QUOTE_CHARACTER,
                                 CSVWriter.NO_ESCAPE_CHARACTER, "\n");
@@ -338,11 +350,12 @@ public class DownloadCsv extends AppCompatActivity {
                         rec[0] = data;//"datetime,ch1,ch2,\n2019-11-22 23:11:22,22,11,\n2019-11-22 23:11:22,22,11";
                         csvwrite.writeNext(rec);
                         csvwrite.close();
+                        mFileNameAdapter.notifyDataSetChanged();
                     }
                 }
                 else
                 {
-                    FileWriter mwriter = new FileWriter(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/files123/"+mDeviceName+".csv",false);
+                    FileWriter mwriter = new FileWriter(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/files123/"+mDeviceName.replaceAll(":","")+".csv",false);
                     CSVWriter csvwrite = new CSVWriter(mwriter, CSVWriter.DEFAULT_SEPARATOR,
                             CSVWriter.NO_QUOTE_CHARACTER,
                             CSVWriter.NO_ESCAPE_CHARACTER, "\n");
@@ -350,6 +363,7 @@ public class DownloadCsv extends AppCompatActivity {
                     rec[0] = data;//"datetime,ch1,ch2,\n2019-11-22 23:11:22,22,11,\n2019-11-22 23:11:22,22,11";
                     csvwrite.writeNext(rec);
                     csvwrite.close();
+                    mFileNameAdapter.notifyDataSetChanged();
                 }
             }
             catch(Exception e)
@@ -368,14 +382,26 @@ public class DownloadCsv extends AppCompatActivity {
         File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/files123");
 
         String filename;
-        Queue<File> files = new LinkedList<>();         //Linklist
+        //Queue<File> files = new LinkedList<>();         //Linklist
 
-        files.addAll(Arrays.asList(path.listFiles()));  //adding all files of path in linklist
+       // files.addAll(Arrays.asList(path.listFiles()));  //adding all files of path in linklist
+        File[] files = path.listFiles();
 
-        while (!files.isEmpty())
+        for(int i=0;i<files.length;i++)
         {
-            File file = files.remove();
-            if (file.isDirectory())
+            if(files[i].getName().endsWith(".csv"))
+            {
+                Log.d("files names",files[i].toString());
+                mFileNameAdapter.addfile(files[i]);//new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/files123"+files[i].getName()));
+                mFileNameAdapter.notifyDataSetChanged();
+            }
+        }
+        //while (!files.isEmpty())
+       // {
+            //File file = files.remove();
+            //mFileNameAdapter.addfile(file);
+            //mFileNameAdapter.notifyDataSetChanged();
+            /*if (file.isDirectory())
             {
                 files.addAll(Arrays.asList(file.listFiles()));
 
@@ -383,13 +409,16 @@ public class DownloadCsv extends AppCompatActivity {
             }
             else if (file.getName().endsWith(".csv") || file.getName().endsWith(".xls") || file.getName().endsWith(".ppt"))
             {   //filtering files
-                filename = file.getName();               // according to their extension
+                mFileNameAdapter.addfile(file);
+                mFileNameAdapter.notifyDataSetChanged();
+
+                *//*filename = file.getName();               // according to their extension
                 filenames.add(filename);          //filenames is string ListArray
+*//*
+            }*/
 
-            }
 
-
-        }
+      //  }
     }
     private View.OnClickListener click=new View.OnClickListener() {
         @Override
@@ -422,4 +451,75 @@ public class DownloadCsv extends AppCompatActivity {
             }
         }
     };
+
+
+    private class FileNameAdapter extends BaseAdapter
+    {
+        private ArrayList<File> filenames;
+        private LayoutInflater mInflator;
+
+        public FileNameAdapter() {
+            super();
+            filenames = new ArrayList<File>();
+            mInflator = DownloadCsv.this.getLayoutInflater();
+        }
+        public void addfile(File fname) {
+          //  if(!filenames.contains(fname)) {
+                filenames.add(fname);
+           // }
+        }
+        public File getDevice(int position) {
+            return filenames.get(position);
+        }
+
+        public void clear() {
+            filenames.clear();
+        }
+
+        @Override
+        public int getCount() {
+            return filenames.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return filenames.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup)
+        {
+            ViewHolder viewHolder;
+            // General ListView optimization code.
+            if (view == null) {
+                view = mInflator.inflate(R.layout.list_item, null);
+                viewHolder = new ViewHolder();
+                viewHolder.fileName = (TextView) view.findViewById(R.id.row_item);
+                view.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) view.getTag();
+            }
+            File fnames = filenames.get(i);
+            final String deviceName = fnames.getName();
+            if (deviceName != null && deviceName.length() > 0)
+                viewHolder.fileName.setText(deviceName);
+            else
+                viewHolder.fileName.setText("No name");
+
+            return view;
+
+
+        }
+    }
+
+    static class ViewHolder {
+        TextView fileName;
+
+    }
+
 }

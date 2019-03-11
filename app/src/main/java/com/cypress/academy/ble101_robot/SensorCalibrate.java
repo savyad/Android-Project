@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -40,12 +41,12 @@ public class SensorCalibrate extends AppCompatActivity {
     public BluetoothLeService mBleService;
     public BluetoothGattCharacteristic characteristic;
 
-    public Button cali_ch1,cali_ch2;
+    public Button cali_ch1,cali_ch2,calib_ch1,calib_ch2;
     public LayoutInflater layoutInflater;
      public AlertDialog alertDialog,alertDialog2,alertDialog3;
      public String a,b;
 
-     public EditText off_ch1,gai_ch1;
+     public EditText off_ch1,gai_ch1,off_ch2,gai_ch2;
 
      public double real_low=0;
     public double real_high=0;
@@ -58,7 +59,7 @@ public class SensorCalibrate extends AppCompatActivity {
     public View view,view2,view3;
     public String mDeviceAddress,mDeviceName;
     public JSONObject refs;
-
+    public Boolean cali_show=false;
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
@@ -114,6 +115,9 @@ public class SensorCalibrate extends AppCompatActivity {
          off_ch1 = (EditText)findViewById(R.id.off_ch1);
         gai_ch1 = (EditText)findViewById(R.id.gain_ch1);
 
+        off_ch2 = (EditText)findViewById(R.id.off_ch2);
+        gai_ch2 = (EditText)findViewById(R.id.gain_ch2);
+
 
         ch1_low = (EditText)view.findViewById(R.id.low_val);
         ch1_high = (EditText)view.findViewById(R.id.high_val);
@@ -129,9 +133,16 @@ public class SensorCalibrate extends AppCompatActivity {
         low_t3=(TextView)view3.findViewById(R.id.low_text);
 
 
+        calib_ch1=(Button)findViewById(R.id.calibrate_ch1);
+        calib_ch2=(Button)findViewById(R.id.calibrate_ch2);
+
         cali_ch1.setOnClickListener(click);
+        cali_ch2.setOnClickListener(click);
         ref.setOnClickListener(click);
         ref3.setOnClickListener(click);
+
+        calib_ch1.setOnClickListener(click);
+        calib_ch2.setOnClickListener(click);
 
         ch1_low.addTextChangedListener(new TextWatcher() {
             @Override
@@ -356,9 +367,19 @@ public class SensorCalibrate extends AppCompatActivity {
 
 
                 real_high = (double)Double.valueOf(low_t3.getText().toString());
-                gain = (    (Double.valueOf(b)) -(Double.valueOf(a))  )/(real_high-real_low);
-                off_ch1.setText(String.valueOf(offset));
-                gai_ch1.setText(String.valueOf(gain));
+                gain = Math.round(((    (Double.valueOf(b)) -(Double.valueOf(a))  )/(real_high-real_low))*10000.0)/10000.0;
+                if(!cali_show)
+                {
+                    off_ch1.setText(String.valueOf(offset));
+                    gai_ch1.setText(String.valueOf(gain));
+                }
+                else
+                {
+                    off_ch2.setText(String.valueOf(offset));
+                    gai_ch2.setText(String.valueOf(gain));
+                }
+
+
                 alertDialog3.dismiss();
 
                 /*Log.d("Low Value",a);
@@ -441,7 +462,15 @@ public class SensorCalibrate extends AppCompatActivity {
                 try
                 {
                     JSONObject obj = new JSONObject(data);
-                    ch1 = obj.getDouble("ch1");
+                    if(!cali_show)
+                    {
+                        ch1 = obj.getDouble("ch1");
+                    }
+                    else
+                    {
+                        ch1 = obj.getDouble("ch2");
+                    }
+
 
                 }
                 catch (Exception e)
@@ -456,7 +485,14 @@ public class SensorCalibrate extends AppCompatActivity {
                 try
                 {
                     JSONObject obj = new JSONObject(data);
-                    ch1 = obj.getDouble("ch1");
+                    if(!cali_show)
+                    {
+                        ch1 = obj.getDouble("ch1");
+                    }
+                    else
+                    {
+                        ch1 = obj.getDouble("ch2");
+                    }
 
                 }
                 catch (Exception e)
@@ -531,7 +567,30 @@ public class SensorCalibrate extends AppCompatActivity {
             switch(view.getId())
             {
                 case R.id.set_cali_range_ch1:
+                    cali_show=false;
                     show_dialog1();
+                    break;
+                case R.id.set_cali_range_ch2:
+                    cali_show=true;
+                    show_dialog1();
+                    break;
+                case R.id.calibrate_ch1:
+                    if( isEmpty(off_ch1) && isEmpty(gai_ch1))//(off_ch1.getText().toString()==null) && (gai_ch1.getText().toString()==null))
+                    {
+                        Toast.makeText(SensorCalibrate.this, "Set Calibration Setting First!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                    else
+                    {
+
+                    }
+                    break;
+                case R.id.calibrate_ch2:
+                    if( isEmpty(off_ch2) && isEmpty(gai_ch2))//(off_ch2.getText().toString()==null) && (gai_ch2.getText().toString()==null))
+                    {
+                        Toast.makeText(SensorCalibrate.this, "Set Calibration Setting First!",
+                                Toast.LENGTH_LONG).show();
+                    }
                     break;
                 case R.id.ref:
                     try
@@ -548,5 +607,14 @@ public class SensorCalibrate extends AppCompatActivity {
 
         }
     };
+
+
+    private boolean isEmpty(EditText etText) {
+        if (etText.getText().toString().trim().length() > 0)
+            return false;
+
+        return true;
+    }
+
 
 }

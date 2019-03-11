@@ -85,12 +85,17 @@ http://www.cypress.com/products/bluetooth-low-energy-ble
             android:theme="@style/AppTheme" />
         <activity
             android:name=".SensorSetup"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".DownloadCsv"
             android:label="@string/title_activity_download_csv"
-            android:theme="@style/AppTheme"/>
-
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".SensorCalibrate"
+            android:label="@string/title_activity_sensor_calibrate"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan"
+            ></activity>
     </application>
 
 </manifest>

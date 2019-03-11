@@ -10,7 +10,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -24,6 +26,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.Reader;
 import java.io.StringReader;
@@ -34,10 +37,12 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.opencsv.*;
 
 import com.highsoft.highcharts.core.*;
@@ -47,11 +52,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 //import com.chilkatsoft.*;
 
+import static com.cypress.academy.ble101_robot.ScanActivity.EXTRAS_BLE_ADDRESS;
+import static com.cypress.academy.ble101_robot.ScanActivity.EXTRAS_BLE_NAME;
 import static com.cypress.academy.ble101_robot.Utils.makeGattUpdateIntentFilter;
 
 public class DeviceSettings extends AppCompatActivity {
-    public static final String EXTRAS_BLE_NAME = "BLE_NAME";
-    public static final String EXTRAS_BLE_ADDRESS = "BLE_ADDRESS";
+
 
     public BluetoothLeService mBleService;
     public String mDeviceAddress,mDeviceName;
@@ -108,19 +114,70 @@ public class DeviceSettings extends AppCompatActivity {
         setContentView(R.layout.activity_device_settings);
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+        mDeviceName = intent.getStringExtra(EXTRAS_BLE_NAME);
+        mDeviceAddress = intent.getStringExtra(EXTRAS_BLE_ADDRESS);
         clr=(Button)findViewById(R.id.button2) ;
         clr.setOnClickListener(click);
 
+
+
         excsv=(Button)findViewById(R.id.ex_csv);
         excsv.setOnClickListener(click);
-        /*HIChartView chartView = (HIChartView) findViewById(R.id.graph);
+
+
+        HIChartView chartView = (HIChartView) findViewById(R.id.shw);
+
+
+        HIRanges ranges = new HIRanges();
+
+        chartView.plugins = new ArrayList<>();
+        chartView.plugins.add("data");
+
+        HIData data = new HIData();
+        String CSV="";//"datetime,ch1,ch2\n2019-2-14 17:19:00,12,23\n2019-2-14 17:19:00,12,23";//,\n2019-2-14 17:55:19,15,20,\n2019-2-14 17:55:23,16,17";
+        String json  ="";
+        int num_series=0;
+        try
+        {
+
+            json = show_graph();
+            JSONObject datad = new JSONObject(json);
+            CSV = datad.getString("data");
+            num_series = datad.getInt("num_of_headers");
+            Log.d("numbers",String.valueOf(num_series));
+        }catch(Exception e)
+        {
+           e.printStackTrace();
+        }
+
+
+        ArrayList<HIYAxis> y_axis = new ArrayList<HIYAxis>(num_series);
+        ArrayList<HISeries> n_series = new ArrayList<HISeries>(num_series);
+
+        for(int i=0;i<num_series;i++)
+        {
+            HIYAxis hiyAxis1 = new HIYAxis();
+            hiyAxis1.setOpposite(true);
+            hiyAxis1.setTitle(new HITitle());
+            hiyAxis1.getTitle().setText("");
+           // hiyAxis1.getTitle().setAlign("right");*/
+            y_axis.add(hiyAxis1);
+        }
+
+
+        data.setItemDelimiter(",");
+        data.setLineDelimiter("\n");
+        //data.setDateFormat("hh:mm:ss");
+        //System.out.println(CSV);
+        data.setCsv(CSV);
+
 
         HIOptions options = new HIOptions();
         HICsv csv=new HICsv();
 
 
         HIExporting exporting = new HIExporting();
-        exporting.setEnabled(true);
+        exporting.setEnabled(false);
         exporting.setCsv(csv);
         HIChart chart = new HIChart();
         chart.setZoomType("x");
@@ -132,12 +189,83 @@ public class DeviceSettings extends AppCompatActivity {
 
         options.setTitle(title);
 
-        HIColumn series = new HIColumn();
-        series.setName("Data");
-        series.setData(new ArrayList<>(Arrays.asList(49.9, 71.5, 106.4, 129.2, 144, 176, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4)));
-        options.setSeries(new ArrayList<HISeries>(Collections.singletonList(series)));
+
+
+       /* HIYAxis hiyAxis1 = new HIYAxis();
+        hiyAxis1.setOpposite(true);
+        //hiyAxis1.setLabels(new HILabels());
+        //hiyAxis1.getLabels().setFormat("{value} C");
+       // hiyAxis1.setTitle(new HITitle());
+        //hiyAxis1.getTitle().setText("C");
+
+        HIYAxis hiyAxis2 = new HIYAxis();
+        hiyAxis2.setOpposite(true);
+        //hiyAxis2.setLabels(new HILabels());
+       // hiyAxis2.getLabels().setFormat("{value} %Rf");
+        hiyAxis2.setTitle(new HITitle());
+        hiyAxis2.getTitle().setText("%Rf");*/
+
+        //options.setYAxis(new ArrayList<>(Arrays.asList(hiyAxis1, hiyAxis2)));
+
+        for(int i =0;i<num_series;i++)
+        {
+            if(i==num_series-1) {
+                HISeries series = new HILine();
+                //series.setName("Humi");
+                series.setYAxis(num_series-1);
+                n_series.add(series);
+            }
+            else
+            {
+                HISeries series = new HILine();
+                series.setYAxis(i);
+
+                //series.setName("Temp");
+                n_series.add(series);
+            }
+            /*else
+                {
+                    HISeries series = new HILine();
+                    series.setYAxis(i);
+                    //series.setName("Temp");
+                    n_series.add(series);
+            }*/
+        }
+
+
+        /*HISeries series1 = new HILine();
+        series1.setName("Temp");
+
+        HISeries series2 = new HILine();
+        series2.setName("Humi");
+        series2.setYAxis(1);*/
+
+        HIXAxis xaxis =  new HIXAxis();
+        xaxis.setType("datetime");
+        xaxis.setTickLength(50);
+        xaxis.setGridLineWidth(1);
+        /*xaxis.setDateTimeLabelFormats(new HIDateTimeLabelFormats());
+        xaxis.getDateTimeLabelFormats().setMonth(new HIMonth());
+        xaxis.getDateTimeLabelFormats().getMonth().setMain("%m");
+
+        xaxis.getDateTimeLabelFormats().setYear(new HIYear());
+        xaxis.getDateTimeLabelFormats().getYear().setMain("%Y");
+        HIDay hiDay = new HIDay();
+        hiDay.setMain("%d");
+        xaxis.getDateTimeLabelFormats().setDay(hiDay);*/
+        //xaxis.setTickPixelInterval(150);
+        options.setXAxis(new ArrayList<>(Collections.singletonList(xaxis)));
+
+        options.setData(data);
+        options.setSeries(n_series);
+        options.setYAxis(y_axis);
+        // options.setSeries(new ArrayList<>(Arrays.asList(series1, series2)));
+
+        //options.set
         options.setExporting(exporting);
-        chartView.setOptions(options);*/
+        options.setCredits(new HICredits());
+        options.getCredits().setEnabled(false);
+        chartView.setOptions(options);
         /*
         mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ", Locale.getDefault());
         setContentView(R.layout.activity_device_settings);
@@ -292,14 +420,68 @@ public class DeviceSettings extends AppCompatActivity {
 
 */
 
-        tt=(TextView) findViewById(R.id.shw);
-        tt.setMovementMethod(new ScrollingMovementMethod());
+       // tt=(TextView) findViewById(R.id.shw);
+        //tt.setMovementMethod(new ScrollingMovementMethod());
+    }
+
+    private String show_graph() throws Exception
+    {
+        Reader in = new FileReader(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/files123/"+mDeviceAddress.replaceAll(":","")+".csv");
+        CSVReader reader = new CSVReader(in);
+        CSVReader csvReader = new CSVReaderBuilder(in).build();
+        String[] headers;
+        String[] data;
+        //headers = reader.readNext();
+        //List<String[]> myData =csvReader.readAll();
+        //Iterator<String[]> iter = myData.iterator();
+        //int size = myData.size();
+        String to_send="";
+        int i, j;
+
+
+        JSONObject csv_details = new JSONObject();
+        StringBuilder b2 = new StringBuilder();
+        int len=0;
+        while((data=reader.readNext())!=null)
+        {
+            len=data.length;
+            for(j=0;j<data.length;j++)
+            {
+                if(j==data.length-1)
+                {
+
+                    b2.append(data[j]);
+                }
+                else
+                {
+                    b2.append(data[j]+",");
+                }
+
+            }
+            b2.append("\n");
+        }
+        /*while (iter.hasNext())
+        {
+            String[] record = iter.next();
+            for(j=0;j<record.length;j++)
+            {
+                b2.append(record[j]+",");
+            }
+            b2.append("\n");
+
+
+        }*/
+        csv_details.put("data",b2.toString());
+        csv_details.put("num_of_headers",len-1);
+        //Log.d("json",csv_details.toString());
+
+        return csv_details.toString();//b2.toString();//b2.toString().substring(0, b2.toString().length() - 2);
     }
     @Override
     protected void onResume()
     {
         super.onResume();
-        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        LocalBroadcastManager.getInstance(this).registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
         if (mBleService != null) {
             final boolean result = mBleService.connect(mDeviceAddress);
             Log.d("aa", "Connect request result=" + result);
@@ -308,10 +490,11 @@ public class DeviceSettings extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(mGattUpdateReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mGattUpdateReceiver);
     }
     @Override
-    protected void onDestroy() {
+    protected void onDestroy()
+    {
         super.onDestroy();
         unbindService(mServiceConnection);
         mBleService.buffer="";

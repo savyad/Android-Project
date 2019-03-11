@@ -16,7 +16,8 @@ public class MyData {
         return value;
     }
 
-    public String toString() {
+    public String toString()
+    {
         return spinnerText;
     }
 

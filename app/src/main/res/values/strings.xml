@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Miigo_BLE</string>
+    <string name="app_name">MiigoBLE</string>
     <string name="title_activity_control">ControlActivity</string>
 
     <string name="no_ble">BLE not supported</string>
@@ -112,4 +112,5 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_download_csv">DownloadCsv</string>
+    <string name="title_activity_sensor_calibrate">SensorCalibrate</string>
 </resources>

@@ -76,13 +76,13 @@ public class FragmentContents extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         //View v=inflater.inflate(R.layout.fragment_fragment_contents, container, false);
-        etUser = (EditText) v.findViewById(R.id.ch1_name);
+        etUser = (EditText) v.findViewById(R.id.off_ch1);
         if(v==null)
         {
 
             v=inflater.inflate(R.layout.fragment_fragment_contents, container, false);
         }
-        etUser = (EditText) v.findViewById(R.id.ch1_name);
+        etUser = (EditText) v.findViewById(R.id.off_ch1);
         if (getArguments().getString(USER) != null){
             mUser=getArguments().getString(USER);
         }
@@ -111,7 +111,7 @@ public class FragmentContents extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        EditText ss =(EditText)v.findViewById(R.id.ch1_name);
+        EditText ss =(EditText)v.findViewById(R.id.off_ch1);
          sss=ss.getText().toString();
         outState.putString("name", sss);
     }
