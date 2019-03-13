@@ -103,6 +103,9 @@ public class DownloadCsv extends AppCompatActivity {
         mDeviceName = intent.getStringExtra(EXTRAS_BLE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_BLE_ADDRESS);
 
+
+        //LocalBroadcastManager.getInstance(this).registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+
         mFileNameAdapter=new FileNameAdapter();
         dstat=(TextView)findViewById(R.id.d_stat);
         dncb=(Button)findViewById(R.id.dnc);
@@ -335,7 +338,7 @@ public class DownloadCsv extends AppCompatActivity {
 
             dstat.setText("DownLoad Completed...");
 
-            File file2 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/files123/"+mDeviceName.replaceAll(":","")+".csv");
+            File file2 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/files123/"+mDeviceAddress.replaceAll(":","")+".csv");
 
             try
             {
@@ -355,7 +358,7 @@ public class DownloadCsv extends AppCompatActivity {
                 }
                 else
                 {
-                    FileWriter mwriter = new FileWriter(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/files123/"+mDeviceName.replaceAll(":","")+".csv",false);
+                    FileWriter mwriter = new FileWriter(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/files123/"+mDeviceAddress.replaceAll(":","")+".csv",false);
                     CSVWriter csvwrite = new CSVWriter(mwriter, CSVWriter.DEFAULT_SEPARATOR,
                             CSVWriter.NO_QUOTE_CHARACTER,
                             CSVWriter.NO_ESCAPE_CHARACTER, "\n");
@@ -389,7 +392,7 @@ public class DownloadCsv extends AppCompatActivity {
 
         for(int i=0;i<files.length;i++)
         {
-            if(files[i].getName().endsWith(".csv"))
+            if(files[i].getName().contains(mDeviceAddress.replaceAll(":","")+".csv"))
             {
                 Log.d("files names",files[i].toString());
                 mFileNameAdapter.addfile(files[i]);//new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/files123"+files[i].getName()));

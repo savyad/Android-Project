@@ -46,6 +46,7 @@ public class SensorCalibrate extends AppCompatActivity {
      public AlertDialog alertDialog,alertDialog2,alertDialog3;
      public String a,b;
 
+     public Boolean valid_val=true;
      public EditText off_ch1,gai_ch1,off_ch2,gai_ch2;
 
      public double real_low=0;
@@ -324,10 +325,25 @@ public class SensorCalibrate extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which)
             {
 
-
-                real_low = Double.valueOf(low_t.getText().toString());
-                offset = Double.valueOf(a) - real_low;
-                show_dialog3();
+                try
+                {
+                    Double num= Double.parseDouble(low_t.getText().toString());
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                    valid_val=false;
+                }
+                if(valid_val) {
+                    real_low = Double.valueOf(low_t.getText().toString());
+                    offset = Double.valueOf(a) - real_low;
+                    show_dialog3();
+                }
+                else
+                {
+                    Toast.makeText(SensorCalibrate.this, "There's Some Problem with the Current Sensor Reading",
+                            Toast.LENGTH_LONG).show();
+                }
                 /*Log.d("Low Value",a);
                 Log.d("High Value",b);
                 */
@@ -365,23 +381,33 @@ public class SensorCalibrate extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which)
             {
 
-
-                real_high = (double)Double.valueOf(low_t3.getText().toString());
-                gain = Math.round(((    (Double.valueOf(b)) -(Double.valueOf(a))  )/(real_high-real_low))*10000.0)/10000.0;
-                if(!cali_show)
+                try
                 {
-                    off_ch1.setText(String.valueOf(offset));
-                    gai_ch1.setText(String.valueOf(gain));
+                    Double num= Double.parseDouble(low_t3.getText().toString());
+                }
+                catch(Exception e)
+                {
+                    valid_val=false;
+                }
+                if(valid_val) {
+                    real_high = (double) Double.valueOf(low_t3.getText().toString());
+                    gain = Math.round((((Double.valueOf(b)) - (Double.valueOf(a))) / (real_high - real_low)) * 10000.0) / 10000.0;
+                    if (!cali_show) {
+                        off_ch1.setText(String.valueOf(offset));
+                        gai_ch1.setText(String.valueOf(gain));
+                    } else {
+                        off_ch2.setText(String.valueOf(offset));
+                        gai_ch2.setText(String.valueOf(gain));
+                    }
+
+
+                    alertDialog3.dismiss();
                 }
                 else
                 {
-                    off_ch2.setText(String.valueOf(offset));
-                    gai_ch2.setText(String.valueOf(gain));
+                    Toast.makeText(SensorCalibrate.this, "There's Some Problem with the Current Sensor Reading",
+                            Toast.LENGTH_LONG).show();
                 }
-
-
-                alertDialog3.dismiss();
-
                 /*Log.d("Low Value",a);
                 Log.d("High Value",b);
                 */

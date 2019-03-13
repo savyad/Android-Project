@@ -427,6 +427,7 @@ public class DeviceSettings extends AppCompatActivity {
     private String show_graph() throws Exception
     {
         Reader in = new FileReader(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/files123/"+mDeviceAddress.replaceAll(":","")+".csv");
+
         CSVReader reader = new CSVReader(in);
         CSVReader csvReader = new CSVReaderBuilder(in).build();
         String[] headers;
@@ -442,22 +443,33 @@ public class DeviceSettings extends AppCompatActivity {
         JSONObject csv_details = new JSONObject();
         StringBuilder b2 = new StringBuilder();
         int len=0;
+        int flf=0;
         while((data=reader.readNext())!=null)
         {
-            len=data.length;
+            //len=data.length;
             for(j=0;j<data.length;j++)
             {
-                if(j==data.length-1)
+                //len=data.length;
+                if(flf==0 )
+                {
+                    len=data.length;
+
+                   /* Log.d("must be 3",String.valueOf(j));
+                    b2.append(data[j]+",");*/
+                }
+                 if(j==data.length-1)
                 {
 
                     b2.append(data[j]);
                 }
-                else
+
+                 else
                 {
                     b2.append(data[j]+",");
                 }
 
             }
+            flf=1;
             b2.append("\n");
         }
         /*while (iter.hasNext())
@@ -471,6 +483,7 @@ public class DeviceSettings extends AppCompatActivity {
 
 
         }*/
+        Log.d("lengthv of ss",String.valueOf(len));
         csv_details.put("data",b2.toString());
         csv_details.put("num_of_headers",len-1);
         //Log.d("json",csv_details.toString());
