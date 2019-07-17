@@ -14,84 +14,6 @@
         android:layout_height="wrap_content">
 
 
-        <TextView
-            android:id="@+id/textView14"
-            android:layout_width="147dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="22dp"
-            android:layout_marginTop="60dp"
-            android:background="#f9535353"
-            android:text="Log Interval"
-            android:textAlignment="center"
-            android:textColor="@android:color/background_light"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/constraint" />
-
-        <Spinner
-            android:id="@+id/log_inter"
-            android:layout_width="147dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="2dp"
-            android:layout_marginTop="60dp"
-            app:layout_constraintStart_toEndOf="@+id/textView14"
-            app:layout_constraintTop_toTopOf="@id/constraint" />
-
-        <TextView
-            android:id="@+id/textView17"
-            android:layout_width="147dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="22dp"
-            android:layout_marginTop="15dp"
-            android:background="#f9535353"
-            android:text="Log Method"
-            android:textAlignment="center"
-            android:textColor="@android:color/background_light"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView14" />
-
-        <TextView
-            android:id="@+id/textView18"
-            android:layout_width="147dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="22dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="11dp"
-            android:background="#f9535353"
-
-            android:text="Sample Rate"
-            android:textAlignment="center"
-            android:textColor="@android:color/background_light"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView17"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <Spinner
-            android:id="@+id/sam_rate"
-            android:layout_width="147dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="2dp"
-            android:layout_marginTop="14dp"
-            app:layout_constraintStart_toEndOf="@+id/textView18"
-            app:layout_constraintTop_toBottomOf="@+id/log_method" />
-
-        <Button
-            android:id="@+id/spinner4"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="22dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
-            android:entries="@array/item"
-            android:text="Send"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.452"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sam_rate" />
-
         <!--<fragment
             android:name="com.cypress.academy.ble101_robot.SettingFragment"
             android:layout_width="match_parent"
@@ -113,12 +35,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="40dp"
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btt"
+            app:layout_constraintTop_toTopOf="parent"
             tools:layout="@layout/fragment_setting"></FrameLayout>
 
         <LinearLayout
@@ -136,26 +57,6 @@
             app:layout_constraintTop_toBottomOf="@+id/frame" />
 
 
-        <Spinner
-            android:id="@+id/log_method"
-            android:layout_width="147dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="2dp"
-            android:layout_marginTop="14dp"
-            app:layout_constraintStart_toEndOf="@+id/textView17"
-            app:layout_constraintTop_toBottomOf="@+id/log_inter" />
-
-        <Button
-            android:id="@+id/btt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="161dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="162dp"
-            android:text="Refresh"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinner4" />
         <!--<android.support.v4.view.ViewPager
             android:id="@+id/container"
             android:layout_width="match_parent"

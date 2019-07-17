@@ -116,8 +116,8 @@ public class DeviceSettings extends AppCompatActivity {
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
         mDeviceName = intent.getStringExtra(EXTRAS_BLE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_BLE_ADDRESS);
-        clr=(Button)findViewById(R.id.button2) ;
-        clr.setOnClickListener(click);
+        //clr=(Button)findViewById(R.id.button2) ;
+        //clr.setOnClickListener(click);
 
 
 
@@ -632,8 +632,8 @@ public class DeviceSettings extends AppCompatActivity {
                 /*case R.id.datetime:
                     showDateTimePicker();
                     break;*/
-                case  R.id.button2:
-                    tt.setText("");
+                /*case  R.id.button2:
+                    tt.setText("");*/
 
                 case R.id.ex_csv:
                     try

@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
@@ -32,6 +33,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.vicmikhailau.maskededittext.MaskedFormatter;
 
@@ -92,6 +94,8 @@ public class ControlActivity extends AppCompatActivity {
     public Boolean mchangedByUser = true;
     private boolean mConnected = false;
     Spinner log_trigger, recordM, unitms;
+    public Spinner log_int,log_met,sam_rat;
+    public Handler handler;
 
     ProgressBar refresh;
     public Button disconnect, sendCommand, clear_buffer, setting_page;
@@ -104,8 +108,15 @@ public class ControlActivity extends AppCompatActivity {
     public final MyData recor_mode[] = new MyData[2];
     public ArrayAdapter<MyData> recordmode_spinnerArrayAdapter;
 
-    public final MyData unit[] = new MyData[11];
-    public ArrayAdapter<MyData> unit_spinnerArrayAdapter;
+
+    public final MyData logTime[] = new MyData[14];
+    public ArrayAdapter<MyData> logTime_spinnerArrayAdapter;
+
+    public final MyData logMethod[] = new MyData[4];
+    public ArrayAdapter<MyData> logMethod_spinnerArrayAdapter;
+
+    public final MyData sampleRate[] = new MyData[11];
+    public ArrayAdapter<MyData> sampleRate_spinnerArrayAdapter;
 
 
     //mDeviceAddress = intent.getStringExtra(EXTRAS_BLE_ADDRESS);
@@ -121,6 +132,7 @@ public class ControlActivity extends AppCompatActivity {
             // Automatically connects to the device upon successful start-up initialization.
             mBleService.connect(mDeviceAddress);
             gattservice(mBleService.getSupportedGattServices());
+
         }
 
         @Override
@@ -169,18 +181,17 @@ public class ControlActivity extends AppCompatActivity {
         supp_p = (TextView) findViewById(R.id.supp);
         log_trigger = (Spinner) findViewById(R.id.log_trigger);
         recordM = (Spinner) findViewById(R.id.rec_mode);
-        unitms = (Spinner) findViewById(R.id.unit);
         logging_on_off = (Switch) findViewById(R.id.logging_on_off);
-        ad_sleep = (Switch) findViewById(R.id.ad_sleep);
+        //ad_sleep = (Switch) findViewById(R.id.ad_sleep);
 
         send = (Button) findViewById(R.id.send_setting);
         //adv=(EditText)findViewById(R.id.ad_inter);
 
 
+
         refresh = (ProgressBar) findViewById(R.id.refresh);
         refresh.setVisibility(View.GONE);
 
-        setting_page = (Button) findViewById(R.id.setting);
         //sendEdit = (EditText) findViewById(R.id.textView3);
 
         if (mDeviceName == null) {
@@ -211,22 +222,7 @@ public class ControlActivity extends AppCompatActivity {
         recordmode_spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_log_trigger);
         recordM.setAdapter(recordmode_spinnerArrayAdapter);
 
-        unit[0] = new MyData("100 ms", "100");
-        unit[1] = new MyData("200 ms", "200");
-        unit[2] = new MyData("300 ms", "300");
-        unit[3] = new MyData("500 ms", "500");
-        unit[4] = new MyData("1 s", "1000");
-        unit[5] = new MyData("2 s", "2000");
-        unit[6] = new MyData("3 s", "3000");
-        unit[7] = new MyData("5 s", "5000");
-        unit[8] = new MyData("7 s", "7000");
-        unit[9] = new MyData("9 s", "9000");
-        unit[10] = new MyData("10 s", "10000");
 
-        unit_spinnerArrayAdapter = new ArrayAdapter<MyData>(
-                ControlActivity.this, R.layout.spinner_log_trigger, unit);
-        unit_spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_log_trigger);
-        unitms.setAdapter(unit_spinnerArrayAdapter);
 
 
         logtrigger_spinnerArrayAdapter = new ArrayAdapter<MyData>(
@@ -272,8 +268,73 @@ public class ControlActivity extends AppCompatActivity {
             }
         });
 
+        log_int=(Spinner)findViewById(R.id.log_inter);
+        log_met=(Spinner)findViewById(R.id.log_method);
+        sam_rat=(Spinner)findViewById(R.id.sam_rate);
+
+
+
+
+        logTime[0] = new MyData("5s", "5");
+        logTime[1] = new MyData("10s", "10");
+        logTime[2] = new MyData("15s", "15");
+        logTime[3] = new MyData("20s", "20");
+        logTime[4] = new MyData("25s", "25");
+        logTime[5] = new MyData("30s", "30");
+        logTime[6] = new MyData("1min", "60");
+        logTime[7] = new MyData("2min", "120");
+        logTime[8] = new MyData("5min", "300");
+        logTime[9] = new MyData("10min", "600");
+        logTime[10] = new MyData("15min", "900");
+        logTime[11] = new MyData("20min", "1200");
+        logTime[12] = new MyData("30min", "1800");
+        logTime[13] = new MyData("1hr", "3600");
+
+
+        logMethod[0] = new MyData("Min", "1");
+        logMethod[1] = new MyData("Max", "2");
+        logMethod[2] = new MyData("Average", "3");
+        logMethod[3] = new MyData("Instant", "4");
+
+        sampleRate[0]= new MyData("1s/S", "1");
+        sampleRate[1]= new MyData("2s/S", "2");
+        sampleRate[2]= new MyData("5s/S", "5");
+        sampleRate[3]= new MyData("10s/S", "10");
+        sampleRate[4]= new MyData("15s/S", "15");
+        sampleRate[5]= new MyData("20s/S", "20");
+        sampleRate[6]= new MyData("25s/S", "25");
+        sampleRate[7]= new MyData("30s/S", "30");
+        sampleRate[8]= new MyData("35s/S", "35");
+        sampleRate[9]= new MyData("40s/S", "40");
+        sampleRate[10]= new MyData("50s/S", "50");
+
+
+
+        logTime_spinnerArrayAdapter= new ArrayAdapter<MyData>(
+                ControlActivity.this,R.layout.spinner_log_trigger,logTime);
+        logTime_spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_log_trigger);
+        log_int.setAdapter(logTime_spinnerArrayAdapter);
+
+
+        logMethod_spinnerArrayAdapter= new ArrayAdapter<MyData>(
+                ControlActivity.this,R.layout.spinner_log_trigger,logMethod);
+        logMethod_spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_log_trigger);
+        log_met.setAdapter(logMethod_spinnerArrayAdapter);
+
+        sampleRate_spinnerArrayAdapter= new ArrayAdapter<MyData>(
+                ControlActivity.this,R.layout.spinner_log_trigger,sampleRate);
+        sampleRate_spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_log_trigger);
+        sam_rat.setAdapter(sampleRate_spinnerArrayAdapter);
 
         send.setOnClickListener(click);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                refreshData();
+            }
+        }, 500);
+
     }
 
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
@@ -285,6 +346,7 @@ public class ControlActivity extends AppCompatActivity {
                 //mConnectionState.setText("Connected");
                 //updateConnectionState(R.string.connected);
                 invalidateOptionsMenu();
+
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
                 //mConnectionState.setText("DisConnected");
@@ -318,7 +380,9 @@ public class ControlActivity extends AppCompatActivity {
         if (mBleService != null) {
             final boolean result = mBleService.connect(mDeviceAddress);
             Log.d("aa", "Connect request result=" + result);
+
         }
+
 
 
     }
@@ -350,9 +414,6 @@ public class ControlActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         //int id = item.getItemId();
         switch (item.getItemId()) {
-            case R.id.setting:
-                opensetting();
-                break;
             case R.id.Disconnect:
                 mBleService.disconnect();
                 break;
@@ -366,22 +427,23 @@ public class ControlActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.refresh:
-                if (mBleService != null) {
-                    refresh.setVisibility(View.VISIBLE);
-                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    if (mBleService.buffer == null) {
-                        send_refresh_req(characteristic, "{\\\"type\\\":\\\"basic\\\"}");
-                        // Log.d("refresh","basic");
-                    } else {
-                        mBleService.buffer = "";
-                        send_refresh_req(characteristic, "{\\\"type\\\":\\\"basic\\\"}");
-                        //Log.d("refresh","basic");
+                refreshData();
+                break;
+            case R.id.sync_rtc:
+                if(mBleService!=null) {
+                    try {
+                        long unixTime = System.currentTimeMillis() / 1000L;
+                        JSONObject ref = new JSONObject();
+                        ref.put("type", "rtc_set");
+                        ref.put("time", unixTime);
+                        sendbyMTUlimit(ref.toString(), characteristic);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
                 }
                 break;
-
+                default:
+                    break;
 
         }
         return super.onOptionsItemSelected(item);
@@ -530,6 +592,7 @@ public class ControlActivity extends AppCompatActivity {
 
             try {
                 JSONObject read_json = new JSONObject(data);
+                System.out.println(read_json.toString());
                 log_trigger.setSelection(0, false);
                 //String prop = read_json.getString("property");
                 //String models = read_json.getString("model_no");
@@ -544,10 +607,12 @@ public class ControlActivity extends AppCompatActivity {
                 long date_tmv = read_json.getLong("date_tm");
 
                 Boolean logg_onoffV = read_json.getBoolean("log");
-                Boolean ad_sleepV = read_json.getBoolean("ad_slp");
+                //Boolean ad_sleepV = read_json.getBoolean("ad_slp");
 
-                int ad_interV = read_json.getInt("ad_int");
-
+                //int ad_interV = read_json.getInt("ad_int");
+                 int log_inter = read_json.getInt("log_inter");
+                int log_mets = read_json.getInt("log_met");
+                int sam_rats = read_json.getInt("sam_rat");
 
                 long loggingst = read_json.getLong("loggings");
                 long loggingen = read_json.getLong("logginge");
@@ -582,14 +647,21 @@ public class ControlActivity extends AppCompatActivity {
                 cali_due.setText(unixTodatetime(cali_duev));
                 read_cnt.setText(String.valueOf(no_readV));
                 logging_on_off.setChecked(logg_onoffV);
-                ad_sleep.setChecked(ad_sleepV);
-                unitms.setSelection(getIndex(unitms, unit, String.valueOf(ad_interV)));
+                //ad_sleep.setChecked(ad_sleepV);
+                //unitms.setSelection(getIndex(unitms, unit, String.valueOf(ad_interV)));
                 //adv.setText(Secstohmsad_int(ad_interV));
+                log_int.setSelection(getIndex(log_int,logTime,String.valueOf(log_inter)));
+                log_met.setSelection(getIndex(log_met,logMethod,String.valueOf(log_mets)));
+                sam_rat.setSelection(getIndex(sam_rat,sampleRate,String.valueOf(sam_rats)));
+
+
+
                 mBleService.buffer = "";
 
 
             } catch (Exception e) {
                 e.printStackTrace();
+                Toast.makeText(this,"something went wrong in communication",Toast.LENGTH_LONG).show();
                 mBleService.buffer = "";
             }
 
@@ -621,6 +693,25 @@ public class ControlActivity extends AppCompatActivity {
     }
 
 
+    private void refreshData()
+    {
+        if (mBleService != null) {
+            System.out.println("ref");
+
+            refresh.setVisibility(View.VISIBLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            if (mBleService.buffer == null) {
+                send_refresh_req(characteristic, "{\\\"type\\\":\\\"basic\\\"}");
+                // Log.d("refresh","basic");
+            } else {
+                mBleService.buffer = "";
+                send_refresh_req(characteristic, "{\\\"type\\\":\\\"basic\\\"}");
+                //Log.d("refresh","basic");
+            }
+
+        }
+    }
     private View.OnClickListener click = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -697,19 +788,23 @@ public class ControlActivity extends AppCompatActivity {
 
                         }
 
-                        if (ad_sleep.isChecked()) {
+                        /*if (ad_sleep.isChecked()) {
                             to_send.put("ad_slp", true);
 
                         } else if (!ad_sleep.isChecked()) {
                             to_send.put("ad_slp", false);
 
-                        }
+                        }*/
                         //String unmaskedString = formatter.formatString(adinter).getUnMaskedString();
 
                         // to_send.put("ad_int",hmsToSecintad_int(adinter));//formatter.formatString(adinter).getUnMaskedString());
-                        to_send.put("ad_int", Integer.parseInt(unit[unitms.getSelectedItemPosition()].getValue()));
+                        to_send.put("log_inter", Integer.parseInt(logTime[log_int.getSelectedItemPosition()].getValue()));
+                        to_send.put("log_met", Integer.parseInt(logMethod[log_met.getSelectedItemPosition()].getValue()));
+                        to_send.put("sam_rat", Integer.parseInt(sampleRate[sam_rat.getSelectedItemPosition()].getValue()));
+
                         if (mBleService != null) {
                             try {
+                                System.out.println(to_send.toString());
                                 sendbyMTUlimit(to_send.toString(), characteristic);
                             } catch (Exception e) {
                                 e.printStackTrace();

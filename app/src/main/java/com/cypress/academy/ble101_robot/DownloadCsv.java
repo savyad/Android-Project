@@ -144,7 +144,7 @@ public class DownloadCsv extends AppCompatActivity {
         });
 
         dncb.setOnClickListener(click);
-        Log.d("name",mDeviceName);
+        //Log.d("name",mDeviceName);
 
     }
     @Override

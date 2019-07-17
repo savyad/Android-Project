@@ -19,9 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="27dp"
             android:layout_marginTop="24dp"
-            android:layout_marginBottom="62dp"
             android:text="Set Cali. Range"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView32" />
 
@@ -64,7 +62,7 @@
             android:layout_height="25dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="15dp"
-            android:background="#f9c2c2c2"
+            android:background="#f9535353"
             android:text="Offset"
             android:textAlignment="textStart"
             android:textColor="@android:color/background_light"
@@ -94,7 +92,7 @@
             android:layout_height="25dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="9dp"
-            android:background="#f9c2c2c2"
+            android:background="#f9535353"
             android:text="Multiplier"
             android:textAlignment="textStart"
             android:textColor="@android:color/background_light"
@@ -108,7 +106,7 @@
             android:layout_height="25dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
-            android:background="#f9c2c2c2"
+            android:background="#f9535353"
             android:text="Multiplier"
             android:textAlignment="textStart"
             android:textColor="@android:color/background_light"
@@ -170,7 +168,7 @@
             android:layout_height="25dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="15dp"
-            android:background="#f9c2c2c2"
+            android:background="#f9535353"
             android:text="Offset"
             android:textAlignment="textStart"
             android:textColor="@android:color/background_light"
@@ -211,6 +209,22 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/set_cali_range_ch2"
             app:layout_constraintTop_toBottomOf="@+id/gain_ch2" />
+
+        <Button
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="148dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="175dp"
+            android:layout_marginBottom="65dp"
+            android:text=" Save "
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/calibrate_ch2" />
 
 
     </android.support.constraint.ConstraintLayout>

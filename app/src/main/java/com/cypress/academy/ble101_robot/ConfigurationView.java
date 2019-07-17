@@ -23,6 +23,7 @@ import android.widget.Button;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.cypress.academy.ble101_robot.DeviceAdapter.SINGLE_DEV_DATA;
 import static com.cypress.academy.ble101_robot.ScanActivity.EXTRAS_BLE_ADDRESS;
 import static com.cypress.academy.ble101_robot.ScanActivity.EXTRAS_BLE_NAME;
 import static com.cypress.academy.ble101_robot.Utils.makeGattUpdateIntentFilter;
@@ -33,9 +34,9 @@ public class ConfigurationView extends AppCompatActivity {
     public BluetoothGattCharacteristic characteristic;
 
     public String mDeviceAddress,mDeviceName;
-    public Button devinfo,devset,downcsv,devcali,devgrpah;
+    public Button devinfo,devset,downcsv,devcali,devgrpah,radiostp,configgateway;
     private boolean mConnected = true;
-
+    public String data;
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @Override
@@ -73,18 +74,24 @@ public class ConfigurationView extends AppCompatActivity {
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
         mDeviceName = intent.getStringExtra(EXTRAS_BLE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_BLE_ADDRESS);
+        data =  intent.getStringExtra(SINGLE_DEV_DATA);
+       //System.out.println("data " +data);
 
         devinfo=(Button)findViewById(R.id.dev_info);
         devset=(Button)findViewById(R.id.sen_setup);
         downcsv=(Button)findViewById(R.id.down);
         devcali=(Button)findViewById(R.id.sen_calibra);
         devgrpah=(Button)findViewById(R.id.graph);
+        radiostp = (Button)findViewById(R.id.rad_stp);
+        configgateway = (Button)findViewById(R.id.configgate);
 
         devinfo.setOnClickListener(click);
         devset.setOnClickListener(click);
         downcsv.setOnClickListener(click);
         devcali.setOnClickListener(click);
         devgrpah.setOnClickListener(click);
+        radiostp.setOnClickListener(click);
+        configgateway.setOnClickListener(click);
 
     }
 
@@ -97,16 +104,15 @@ public class ConfigurationView extends AppCompatActivity {
             final boolean result = mBleService.connect(mDeviceAddress);
             Log.d("aa", "Connect request result=" + result);
         }
-        else if(mBleService == null && !mConnected)
-        {
-            finish();
-        }
 
     }
     @Override
     protected void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mGattUpdateReceiver);
+        //mBleService.buffer="";
+        //mBleService.disconnect();
+        //finish();
     }
     @Override
     protected void onDestroy()
@@ -251,6 +257,18 @@ public class ConfigurationView extends AppCompatActivity {
                         startActivity(intent);
                     }
                     break;
+                case R.id.rad_stp:
+                    if(mBleService!=null)
+                    {
+                        final Intent intent = new Intent(ConfigurationView.this, RadioSetup.class);
+
+                        intent.putExtra(EXTRAS_BLE_ADDRESS,mDeviceAddress);
+                        intent.putExtra(EXTRAS_BLE_NAME,mDeviceName);
+                        //mBluetoothDevice.get(position).createBond();
+                        // Stop scanning
+                        startActivity(intent);
+                    }
+                    break;
                 case R.id.graph:
                     if(mBleService!=null)
                     {
@@ -263,6 +281,18 @@ public class ConfigurationView extends AppCompatActivity {
                         startActivity(intent);
                     }
                     break;
+                case R.id.configgate:
+                    if(mBleService!=null)
+                    {
+
+                        final Intent intent = new Intent(ConfigurationView.this, ConfigureGateway.class);
+
+                        intent.putExtra(EXTRAS_BLE_ADDRESS,mDeviceAddress);
+                        intent.putExtra(EXTRAS_BLE_NAME,mDeviceName);
+                        //mBluetoothDevice.get(position).createBond();
+                        // Stop scanning
+                        startActivity(intent);
+                    }
                     default:
                         break;
 

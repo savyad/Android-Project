@@ -40,6 +40,7 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
+import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;
@@ -53,12 +54,14 @@ import android.os.ParcelUuid;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
+import android.util.SparseArray;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -85,7 +88,7 @@ public class ScanActivity extends AppCompatActivity {
 
     private static final int REQUEST_ENABLE_BLE = 1;
     // Scan for 10 seconds.
-    private static final long SCAN_TIMEOUT = 5000;
+    private static final long SCAN_TIMEOUT = 7000;
 
     //This is required for Android 6.0 (Marshmallow)
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
@@ -102,19 +105,29 @@ public class ScanActivity extends AppCompatActivity {
 
      // The array adapter will be used to display the list of devices found during scanning
     ArrayAdapter<String> mBleArrayAdapter;
+    DeviceAdapter adapter;
 
-
+    List<DevData> devDataList;
+    List<DevData> templistdev;
+    RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scan);
+        setContentView(R.layout.recycler_view);
 
         // This is the list view in the layout that holds the items
-        BleDeviceList = (ListView) findViewById(R.id.BlelistItems);
+        //BleDeviceList = (ListView) findViewById(R.id.BlelistItems);
 
         // This is used once scanning is started in a new thread
         mHandler = new Handler();
 
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+        devDataList = new ArrayList<>();
+        templistdev = new ArrayList<>();
         // Check to see if the device supports BLE. If not, just exit right away.
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
             Toast.makeText(this, R.string.no_ble, Toast.LENGTH_SHORT).show();
@@ -177,6 +190,11 @@ public class ScanActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        devDataList.clear();
+        mBluetoothDevice = new ArrayList<>();
+        adapter = new DeviceAdapter(ScanActivity.this, devDataList);
+        recyclerView.setAdapter(adapter);
+
 
         // Verify that bluetooth is enabled. If not, request permission to enable it.
         if (!mBluetoothAdapter.isEnabled()) {
@@ -186,22 +204,27 @@ public class ScanActivity extends AppCompatActivity {
         }
 
         // Create arrays to hold BLE info found during scanning
-        mBluetoothDevice = new ArrayList<>();
-        mBleName = new ArrayList<>();
+        //
+        //mBleName = new ArrayList<>();
         // Create an array adapter and associate it with the list in the layout that displays the values
-        mBleArrayAdapter = new ArrayAdapter<>(this, R.layout.ble_device_list, R.id.ble_name, mBleName);
-        BleDeviceList.setAdapter(mBleArrayAdapter);
+       // adapter = new DeviceAdapter(ScanActivity.this, devDataList);
+
+       // mBleArrayAdapter = new ArrayAdapter<>(this, R.layout.ble_device_list, R.id.ble_name, mBleName);
+       // BleDeviceList.setAdapter(mBleArrayAdapter);
         // Setup the SwipeRefreshLayout and add a listener to refresh when the user
         // swipes down from the top of the screen.
+
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshId);
 
         // Setup a listener for swipe events
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (!mScanning) {
+                if (!mScanning || mScanning) {
+                    scanLeDevice(false);
                     mBluetoothDevice.clear(); // Remove all existing devices
-                    mBleArrayAdapter.clear();
+                    devDataList.clear();
+                   // mBleArrayAdapter.clear();
                     scanLeDevice(true); // Start a scan if not already running
                     Log.i(TAG, "Rescanning");
                 }
@@ -211,7 +234,7 @@ public class ScanActivity extends AppCompatActivity {
 
         // Set up a listener for when the user clicks on one of the devices found.
         // We need to launch the control activity when that happens
-        BleDeviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+       /* BleDeviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.i(TAG, "Item Selected");
@@ -230,7 +253,7 @@ public class ScanActivity extends AppCompatActivity {
                 scanLeDevice(false); // Stop scanning
                 startActivity(intent);
             }
-        });
+        });*/
 
         scanLeDevice(true); // Start scanning automatically when we first start up
     }
@@ -250,7 +273,8 @@ public class ScanActivity extends AppCompatActivity {
         super.onPause();
         scanLeDevice(false);
         mBluetoothDevice.clear();
-        mBleArrayAdapter.clear();
+        devDataList.clear();
+        //mBleArrayAdapter.clear();
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
@@ -262,6 +286,7 @@ public class ScanActivity extends AppCompatActivity {
     private void scanLeDevice(final boolean enable) {
         if (enable) { // enable set to start scanning
             // Stops scanning after a pre-defined scan period.
+
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -291,16 +316,26 @@ public class ScanActivity extends AppCompatActivity {
                         .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
                         .build();
                 filters = new ArrayList<>();
-                // We will scan just for the CAR's UUID
+
+
                 UUID uid = convertFromInteger(0x0001);//UUID.fromString("0x0001");
                 ParcelUuid PUuid = new ParcelUuid(uid);
-                ScanFilter filter = new ScanFilter.Builder().setServiceUuid(PUuid).build();
+                //ScanFilter filter = new ScanFilter.Builder().setServiceUuid(PUuid).build();
+               ScanFilter filter = new ScanFilter.Builder().setManufacturerData(89,new byte[] {}).build();
+               ScanFilter filte2 = new ScanFilter.Builder().setManufacturerData(3328,new byte[] {}).build();
+                ScanFilter filter3 = new ScanFilter.Builder().setManufacturerData(88,new byte[] {}).build();
                 filters.add(filter);
+                filters.add(filte2);
+                filters.add(filter3);
+
                 if(mLEScanner==null)
                 {
                     mLEScanner = mBluetoothAdapter.getBluetoothLeScanner();
                 }
-                mLEScanner.startScan(filters, settings, mScanCallback);
+                if(mLEScanner!=null) {
+                    mLEScanner.startScan(filters, settings, mScanCallback);
+                }
+
             }
         } else { // enable set to stop scanning
             if(mScanning) {
@@ -308,7 +343,7 @@ public class ScanActivity extends AppCompatActivity {
                 if (Build.VERSION.SDK_INT < 21) {
                     //noinspection deprecation
                     mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                } else {
+                } else if(mLEScanner!=null){
                     mLEScanner.stopScan(mScanCallback);
                 }
             }
@@ -356,23 +391,64 @@ public class ScanActivity extends AppCompatActivity {
      * This is the callback for BLE scanning for LOLLIPOP and later
      * It is called each time a devive is found so we need to add it to the list
      */
+    public static String bytesToHex(byte[] bytes) {
+        StringBuilder builder = new StringBuilder();
+        for (byte b: bytes) {
+            builder.append(String.format("%02x", b));
+        }
+        return builder.toString();
+
+    }
+    public static String SbytesToHex(SparseArray<byte[]> bytes) {
+        StringBuilder builder = new StringBuilder();
+        byte[] dd = bytes.valueAt(0);
+
+        /*for(int i=0;i<bytes.size();i++)
+        {
+            builder.append(String.format("%02x", bytes.keyAt(i)));
+        }*/
+        for (byte b: dd)
+        {
+            builder.append(String.format("%02x", b));
+        }
+        //System.out.println( dd.length);
+        return builder.toString();
+
+    }
     private final ScanCallback mScanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             if(!mBluetoothDevice.contains(result.getDevice()))
             { // only add new devices
-                int flags = result.getScanRecord().getAdvertiseFlags();
-                //System.out.println(result.getDevice().getName() + flags);
-                //Log.d(result.getDevice().getName(),String.valueOf(flags));
-
-                if (flags ==5)
+                //int flags = result.getScanRecord().getAdvertiseFlags();
+                mBluetoothDevice.add(result.getDevice());
+                ScanRecord scanRecord = result.getScanRecord();
+               // byte[]  manufacturerData = scanRecord.getManufacturerSpecificData(89);
+                SparseArray<byte[]> data = scanRecord.getManufacturerSpecificData();
+               //System.out.println(result.getDevice().getAddress()+" "+result.getDevice().getName());
+              //  if(manufacturerData!=null)
+              //  {
+                if(data.size()==0)
                 {
-                    //Log.d(result.getDevice().getName()+"_diff",String.valueOf(flags));
-                    mBluetoothDevice.add(result.getDevice());
-                    mBleName.add(result.getDevice().getName() + " (" + result.getDevice().getAddress() + ")");
-                    mBleArrayAdapter.notifyDataSetChanged();// Update the list on the screen
-
+                    templistdev.add(new DevData(result.getRssi(), result.getDevice().getAddress(), result.getDevice().getName(), "Press me to Connect", data.keyAt(0)));//bytesToHex(manufacturerData)));
+                    devDataList = templistdev;
+                    adapter = new DeviceAdapter(ScanActivity.this, devDataList);
+                    recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
                 }
+                else
+                {
+
+                    templistdev.add(new DevData(result.getRssi(), result.getDevice().getAddress(), result.getDevice().getName(), SbytesToHex(data), data.keyAt(0)));//bytesToHex(manufacturerData)));
+                    devDataList = templistdev;
+                    adapter = new DeviceAdapter(ScanActivity.this, devDataList);
+                    recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                }
+                    // }
+                    //mBluetoothDevice.add(result.getDevice());
+                    //mBleName.add(result.getDevice().getName() + " (" + result.getDevice().getAddress() + ")");
+                   // mBleArrayAdapter.notifyDataSetChanged();// Update the list on the screen
 
             }
 

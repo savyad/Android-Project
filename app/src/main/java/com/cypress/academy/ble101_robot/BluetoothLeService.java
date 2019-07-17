@@ -52,6 +52,7 @@ public class BluetoothLeService extends Service {
 
 
     public String buffer="";
+
     /*public final static UUID UUID_HEART_RATE_MEASUREMENT =
             UUID.fromString(SampleGattAttributes.HEART_RATE_MEASUREMENT);*/
 
@@ -113,7 +114,8 @@ public class BluetoothLeService extends Service {
                                  int mtu,
                                  int status)
         {
-            if (status == BluetoothGatt.GATT_SUCCESS) {
+            if (status == BluetoothGatt.GATT_SUCCESS)
+            {
 
                 Log.i(TAG, "Attempting to start service discovery:" +
                         mBluetoothGatt.discoverServices());

@@ -9,13 +9,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,7 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +38,7 @@ public class SensorCalibrate extends AppCompatActivity {
     public BluetoothLeService mBleService;
     public BluetoothGattCharacteristic characteristic;
 
-    public Button cali_ch1,cali_ch2,calib_ch1,calib_ch2;
+    public Button cali_ch1,cali_ch2,calib_ch1,calib_ch2,save;
     public LayoutInflater layoutInflater;
      public AlertDialog alertDialog,alertDialog2,alertDialog3;
      public String a,b;
@@ -61,6 +58,7 @@ public class SensorCalibrate extends AppCompatActivity {
     public String mDeviceAddress,mDeviceName;
     public JSONObject refs;
     public Boolean cali_show=false;
+    public String moffset,mgain;
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
@@ -96,7 +94,8 @@ public class SensorCalibrate extends AppCompatActivity {
         bindService(gattServiceIntent, mServiceConnection,BIND_AUTO_CREATE);
         mDeviceName = intent.getStringExtra(EXTRAS_BLE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_BLE_ADDRESS);
-
+        moffset = intent.getStringExtra("Offset");
+        mgain = intent.getStringExtra("Gain");
 
         refs=new JSONObject();
         layoutInflater = LayoutInflater.from(SensorCalibrate.this);
@@ -137,6 +136,8 @@ public class SensorCalibrate extends AppCompatActivity {
         calib_ch1=(Button)findViewById(R.id.calibrate_ch1);
         calib_ch2=(Button)findViewById(R.id.calibrate_ch2);
 
+        save=(Button)findViewById(R.id.save);
+
         cali_ch1.setOnClickListener(click);
         cali_ch2.setOnClickListener(click);
         ref.setOnClickListener(click);
@@ -144,6 +145,7 @@ public class SensorCalibrate extends AppCompatActivity {
 
         calib_ch1.setOnClickListener(click);
         calib_ch2.setOnClickListener(click);
+        save.setOnClickListener(click);
 
         ch1_low.addTextChangedListener(new TextWatcher() {
             @Override
@@ -201,6 +203,18 @@ public class SensorCalibrate extends AppCompatActivity {
 
             }
         });
+
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try{
+
+                    send_calibration_setting(moffset,mgain);
+                }catch (Exception e){e.printStackTrace();}
+
+            }
+        }, 3000);
 
     }
 
@@ -268,6 +282,20 @@ public class SensorCalibrate extends AppCompatActivity {
         }
     };
 
+
+    private void send_calibration_setting(String moffset,String mgain) throws Exception
+    {
+        JSONObject obj = new JSONObject();
+        obj.put("type","sen_cal");
+        obj.put("off",Double.parseDouble(moffset));
+        obj.put("gain",Double.parseDouble(mgain));
+        System.out.println(obj.toString());
+        sendbyMTUlimit(obj.toString(),characteristic);
+        Toast.makeText(SensorCalibrate.this, "Calibration Settings Sent Successfully",
+                Toast.LENGTH_LONG).show();
+        finish();
+
+    }
 
     private void show_dialog1()
     {
@@ -487,6 +515,7 @@ public class SensorCalibrate extends AppCompatActivity {
             {
                 try
                 {
+
                     JSONObject obj = new JSONObject(data);
                     if(!cali_show)
                     {
@@ -629,6 +658,8 @@ public class SensorCalibrate extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     break;
+                case R.id.save:
+
             }
 
         }
