@@ -42,6 +42,7 @@ public class RepeaterAdvertise extends AppCompatActivity {
     private static Handler mHandler;
     private static final long SCAN_TIMEOUT = 15000;
     public DevData data;
+    //List<BluetoothDevice> mBluetoothDevice;
 
     RecyclerView recyclerView;
     ReapeaterDeviceAdapter reapeaterDeviceAdapter;
@@ -84,9 +85,9 @@ public class RepeaterAdvertise extends AppCompatActivity {
         }
         recyclerView = (RecyclerView) findViewById(R.id.devdata);
         //dummyData();
-        //recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        reapeaterDeviceAdapter = new ReapeaterDeviceAdapter(modelArrayList);
+        reapeaterDeviceAdapter = new ReapeaterDeviceAdapter(RepeaterAdvertise.this, modelArrayList);
 
         recyclerView.setAdapter(reapeaterDeviceAdapter);
 
@@ -125,6 +126,8 @@ public class RepeaterAdvertise extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+       // mBluetoothDevice = new ArrayList<>();
+
         scanLeDevice(true,data.getMac_address());
     }
 
@@ -222,13 +225,12 @@ public class RepeaterAdvertise extends AppCompatActivity {
     }
     private final ScanCallback mScanCallback = new ScanCallback() {
         @Override
-        public void onScanResult(int callbackType, ScanResult result)
-        {
+        public void onScanResult(int callbackType, ScanResult result) {
 
-            ScanRecord scanRecord = result.getScanRecord();
-
-            SparseArray<byte[]> dataw = scanRecord.getManufacturerSpecificData();
-            if(dataw.size()>0) {
+                ScanRecord scanRecord = result.getScanRecord();
+              //  mBluetoothDevice.add(result.getDevice());
+                SparseArray<byte[]> dataw = scanRecord.getManufacturerSpecificData();
+            if (dataw.size() > 0) {
                 //populate_devData(SbytesToHex(dataw));
                 String data = SbytesToHex(dataw);
                 ArrayList<RepeaterModel> repeatermodels = new ArrayList<>();
@@ -236,27 +238,28 @@ public class RepeaterAdvertise extends AppCompatActivity {
                /* for (RepeaterModel model : modelArrayList) {
                     repeatermodels.add(model.clone());
                 }*/
-                int rssi = Integer.valueOf(data.substring(12,14),16)-256;
-                repeatermodels.add(new RepeaterModel(data.substring(0,12),String.valueOf(rssi),0));
-                System.out.println(rssi +" "+ data.substring(0,12));
-                //reapeaterDeviceAdapter= new ReapeaterDeviceAdapter(repeatermodels);
+                int rssi = Integer.valueOf(data.substring(12, 14), 16) - 256;
+                repeatermodels.add(new RepeaterModel(data.substring(0, 12), String.valueOf(rssi), 0));
+                //repeatermodels.add(new RepeaterModel("asdasdasasd",String.valueOf(rssi),0));
+
+                System.out.println(rssi + " " + data.substring(0, 12));
+
                 reapeaterDeviceAdapter.setData(repeatermodels);
+                //reapeaterDeviceAdapter.notifyDataSetChanged();
                 //recyclerView.setAdapter(reapeaterDeviceAdapter);
 
-            }
-            else if(false)
-            {
+            } else if (false) {
                 //alertDialog.dismiss();
                 final Intent intent = new Intent(RepeaterAdvertise.this, ConfigurationView.class);
                 intent.putExtra(EXTRAS_BLE_ADDRESS, data.getMac_address());
                 intent.putExtra(EXTRAS_BLE_NAME, data.getName());
-                intent.putExtra(SINGLE_DEV_DATA,data.getDev_data());
-                scanLeDevice(false,data.getMac_address());
+                intent.putExtra(SINGLE_DEV_DATA, data.getDev_data());
+                scanLeDevice(false, data.getMac_address());
                 //mconfig=false;
                 startActivity(intent);
             }
-
         }
+
     };
     /*private void dummyData() {
 

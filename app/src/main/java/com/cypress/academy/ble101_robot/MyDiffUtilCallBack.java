@@ -7,12 +7,13 @@ import android.support.v7.util.DiffUtil;
 import com.cypress.academy.ble101_robot.RepeaterModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MyDiffUtilCallBack extends DiffUtil.Callback {
-    ArrayList<RepeaterModel> newList;
-    ArrayList<RepeaterModel> oldList;
+    List<RepeaterModel> newList;
+    List<RepeaterModel> oldList;
 
-    public MyDiffUtilCallBack(ArrayList<RepeaterModel> newList, ArrayList<RepeaterModel> oldList) {
+    public MyDiffUtilCallBack(List<RepeaterModel> newList, List<RepeaterModel> oldList) {
         this.newList = newList;
         this.oldList = oldList;
     }
@@ -29,7 +30,8 @@ public class MyDiffUtilCallBack extends DiffUtil.Callback {
 
     @Override
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        return newList.get(newItemPosition).getMacdev().equals(oldList.get(oldItemPosition).getMacdev()) ;
+        return newList.get(newItemPosition).getMacdev()==(oldList.get(oldItemPosition).getMacdev()) ;
+
     }
 
     @Override
@@ -39,7 +41,7 @@ public class MyDiffUtilCallBack extends DiffUtil.Callback {
         final RepeaterModel oldRepeater = oldList.get(oldItemPosition);
         final RepeaterModel newRepeater = newList.get(newItemPosition);
 
-        return oldRepeater.getRssi().equals(newRepeater.getRssi());
+        return oldRepeater.getRssi()==(newRepeater.getRssi());
 
     }
 
@@ -60,6 +62,6 @@ public class MyDiffUtilCallBack extends DiffUtil.Callback {
             }
         }
         return diff;
-        //return super.getChangePayload(oldItemPosition, newItemPosition);
+       // return super.getChangePayload(oldItemPosition, newItemPosition);
     }
 }

@@ -237,7 +237,7 @@ public class DeviceDecisions extends AppCompatActivity {
 
     private void populate_devData(String data)
     {
-            battery = ((double)(Integer.parseInt(data.substring(6,8)+data.substring(4,6),16)))/100;
+            battery = ((double)(Integer.parseInt(data.substring(6,8)+data.substring(4,6),16)))/1000;
 
             temperature = ((double) (Integer.parseInt(data.substring(12,14)+data.substring(10,12),16)))/100;
             if(temperature>60000)

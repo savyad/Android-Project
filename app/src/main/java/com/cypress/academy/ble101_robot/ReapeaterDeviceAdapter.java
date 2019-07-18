@@ -1,5 +1,6 @@
 package com.cypress.academy.ble101_robot;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.util.DiffUtil;
@@ -15,7 +16,8 @@ import java.util.List;
 
 public class ReapeaterDeviceAdapter extends RecyclerView.Adapter<ReapeaterDeviceAdapter.CryptoViewHolder> {
 
-    private ArrayList<RepeaterModel> data;
+    private ArrayList<RepeaterModel> data = new ArrayList<>();;
+    private Context mCtx;
 
     public class CryptoViewHolder extends RecyclerView.ViewHolder {
 
@@ -28,7 +30,8 @@ public class ReapeaterDeviceAdapter extends RecyclerView.Adapter<ReapeaterDevice
         }
     }
 
-    public ReapeaterDeviceAdapter(ArrayList<RepeaterModel> data) {
+    public ReapeaterDeviceAdapter(Context ctx,ArrayList<RepeaterModel> data) {
+        this.mCtx = ctx;
         this.data = data;
     }
 
@@ -40,6 +43,7 @@ public class ReapeaterDeviceAdapter extends RecyclerView.Adapter<ReapeaterDevice
 
     @Override
     public void onBindViewHolder(CryptoViewHolder holder, int position) {
+        //System.out.println("onBinder");
         holder.mName.setText(data.get(position).macdev);
         holder.mPrice.setText(String.valueOf(data.get(position).rssi));
     }
@@ -51,7 +55,7 @@ public class ReapeaterDeviceAdapter extends RecyclerView.Adapter<ReapeaterDevice
             super.onBindViewHolder(holder, position, payloads);
         } else {
             Bundle o = (Bundle) payloads.get(0);
-
+            System.out.println("onbinder");
             for (String key : o.keySet()) {
                 if (key.equals("price")) {
                     holder.mName.setText(data.get(position).macdev);
@@ -75,11 +79,11 @@ public class ReapeaterDeviceAdapter extends RecyclerView.Adapter<ReapeaterDevice
     public void setData(ArrayList<RepeaterModel> newData) {
 
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new MyDiffUtilCallBack(newData, data));
-        data.clear();
+        this.data.clear();
         this.data.addAll(newData);
         diffResult.dispatchUpdatesTo(this);
 
-        //this.notifyDataSetChanged();
+        this.notifyDataSetChanged();
     }
 
 

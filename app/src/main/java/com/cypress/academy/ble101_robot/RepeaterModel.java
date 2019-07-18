@@ -2,6 +2,8 @@ package com.cypress.academy.ble101_robot;
 
 import android.support.annotation.NonNull;
 
+import java.util.Objects;
+
 public class RepeaterModel  {
 
     public String macdev;
@@ -64,24 +66,50 @@ public class RepeaterModel  {
         return clone;
 
     }*/
-    @Override
+   /* @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
 
         RepeaterModel repeater = (RepeaterModel) obj;
+        System.out.println("asdasd");
+        if (this.macdev.equals(repeater.macdev) ) return false;
+        //if (rssi!=repeater.rssi) return false;
+        return imageid != 0 ? true : true;
 
-        if (macdev .equals(repeater.macdev) ) return false;
-        if (rssi!=repeater.rssi) return false;
-        return imageid != 0 ? true : false;
 
+        *//*if (this == obj) return true;
+        if (obj == null) return false;
+        if (this.getClass() != obj.getClass()) return false;
+        RepeaterModel that = (RepeaterModel) obj;
+        if (this.imageid != that.imageid) return false;
+        if (!this.rssi.equals(that.rssi)) return false;
+        if (!this.macdev.equals(that.macdev)) return false;
+        return true;*//*
+
+    }*/
+
+    @Override
+    public boolean equals(Object o) {
+        System.out.println("in Equals");
+        if (this == o) return true;
+        if (!(o instanceof RepeaterModel)) return false;
+        RepeaterModel that = (RepeaterModel) o;
+        return getImageid() == that.getImageid() &&
+                Objects.equals(getMacdev(), that.getMacdev()) &&
+                Objects.equals(getRssi(), that.getRssi());
     }
 
-   /* @Override
+    @Override
     public int hashCode() {
-        int result = id;
-        result = result + (name != null ? name.hashCode() : 0);
-        result = result + role.hashCode();
+        return Objects.hash(getMacdev(), getRssi(), getImageid());
+    }
+/*@Override
+    public int hashCode() {
+        int result = Integer.valueOf(rssi);
+       // result = result + (imageid != 0 ? imageid.hashCode() : 0);
+        result = result + rssi.hashCode();
+        System.out.println("hash");
         return result;
     }*/
 }
