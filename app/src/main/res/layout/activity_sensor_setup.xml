@@ -8,7 +8,7 @@
     android:background="#0f413d"
     tools:context=".SensorSetup">
 
-    <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/constraint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -63,6 +63,6 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
         -->
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.ConstraintLayout>
 
 </ScrollView>

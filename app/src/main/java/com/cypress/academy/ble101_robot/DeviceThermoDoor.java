@@ -17,8 +17,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+//import android.support.annotation.NonNull;
+//import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
@@ -29,6 +29,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -440,7 +443,7 @@ public class DeviceThermoDoor extends AppCompatActivity {
         //alertDialog.setMessage("Your Message Here");
 
 
-        alertDialog.setButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE, "Next", new DialogInterface.OnClickListener() {
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Next", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
@@ -459,7 +462,7 @@ public class DeviceThermoDoor extends AppCompatActivity {
         });
 
 
-        alertDialog.setButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
@@ -484,7 +487,7 @@ public class DeviceThermoDoor extends AppCompatActivity {
         //alertDialog.setMessage("Your Message Here");
         set_low.setText("Set the Sensor at "+a );
 
-        alertDialog2.setButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE, "Set Low", new DialogInterface.OnClickListener() {
+        alertDialog2.setButton(AlertDialog.BUTTON_POSITIVE, "Set Low", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
@@ -516,7 +519,7 @@ public class DeviceThermoDoor extends AppCompatActivity {
         });
 
 
-        alertDialog2.setButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+        alertDialog2.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
@@ -540,7 +543,7 @@ public class DeviceThermoDoor extends AppCompatActivity {
         //alertDialog.setMessage("Your Message Here");
         set_low3.setText("Set the Sensor at "+b );
 
-        alertDialog3.setButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE, "Set High", new DialogInterface.OnClickListener() {
+        alertDialog3.setButton(AlertDialog.BUTTON_POSITIVE, "Set High", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
@@ -587,7 +590,7 @@ public class DeviceThermoDoor extends AppCompatActivity {
         });
 
 
-        alertDialog3.setButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+        alertDialog3.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which)
             {

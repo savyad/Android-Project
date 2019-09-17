@@ -1,6 +1,8 @@
 package com.cypress.academy.ble101_robot;
 
-import android.support.v7.util.DiffUtil;
+//import android.support.v7.util.DiffUtil;
+
+import androidx.recyclerview.widget.DiffUtil;
 
 import java.util.List;
 

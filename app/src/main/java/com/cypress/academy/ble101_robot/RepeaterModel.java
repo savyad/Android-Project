@@ -1,16 +1,17 @@
 package com.cypress.academy.ble101_robot;
 
-import android.support.annotation.NonNull;
+//import android.support.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 public class RepeaterModel  {
 
     public String macdev;
-    public String rssi ;
+    public int rssi ;
     public int imageid;
 
-    public RepeaterModel(String macdev, String rssi, int imageid) {
+    public RepeaterModel(String macdev, int rssi, int imageid) {
         this.macdev = macdev;
         this.rssi = rssi;
         this.imageid = imageid;
@@ -24,11 +25,11 @@ public class RepeaterModel  {
         this.macdev = macdev;
     }
 
-    public String getRssi() {
+    public int getRssi() {
         return rssi;
     }
 
-    public void setRssi(String rssi) {
+    public void setRssi(int rssi) {
         this.rssi = rssi;
     }
 
@@ -91,20 +92,21 @@ public class RepeaterModel  {
 
     @Override
     public boolean equals(Object o) {
-        System.out.println("in Equals");
+        System.out.println("in equals");
         if (this == o) return true;
         if (!(o instanceof RepeaterModel)) return false;
         RepeaterModel that = (RepeaterModel) o;
-        return getImageid() == that.getImageid() &&
-                Objects.equals(getMacdev(), that.getMacdev()) &&
-                Objects.equals(getRssi(), that.getRssi());
+        return getRssi() == that.getRssi() &&
+                getImageid() == that.getImageid() &&
+                getMacdev().equals(that.getMacdev());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getMacdev(), getRssi(), getImageid());
     }
-/*@Override
+
+   /*@Override
     public int hashCode() {
         int result = Integer.valueOf(rssi);
        // result = result + (imageid != 0 ? imageid.hashCode() : 0);

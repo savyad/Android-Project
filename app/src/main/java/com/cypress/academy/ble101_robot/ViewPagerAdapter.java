@@ -1,14 +1,18 @@
 package com.cypress.academy.ble101_robot;
 
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+//import androidx.core.app.Fragment;
+//import androidx.core.app.FragmentManager;
+//import androidx.core.app.FragmentPagerAdapter;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
     int tabCount;
 
-    public ViewPagerAdapter(FragmentManager fm,int tabCount) {
+    public ViewPagerAdapter(FragmentManager fm, int tabCount) {
         super(fm);
         this.tabCount= tabCount;
     }

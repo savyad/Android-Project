@@ -3,21 +3,25 @@ package com.cypress.academy.ble101_robot;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.util.DiffUtil;
+/*import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.util.Log;*/
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ReapeaterDeviceAdapter extends RecyclerView.Adapter<ReapeaterDeviceAdapter.CryptoViewHolder> {
 
-    private ArrayList<RepeaterModel> data = new ArrayList<>();;
+    private ArrayList<RepeaterModel> data;// = new ArrayList<>();;
     private Context mCtx;
+    //private ArrayList<RepeaterModel> mitems;
 
     public class CryptoViewHolder extends RecyclerView.ViewHolder {
 
@@ -43,7 +47,7 @@ public class ReapeaterDeviceAdapter extends RecyclerView.Adapter<ReapeaterDevice
 
     @Override
     public void onBindViewHolder(CryptoViewHolder holder, int position) {
-        //System.out.println("onBinder");
+        System.out.println("onBinder");
         holder.mName.setText(data.get(position).macdev);
         holder.mPrice.setText(String.valueOf(data.get(position).rssi));
     }
@@ -52,10 +56,13 @@ public class ReapeaterDeviceAdapter extends RecyclerView.Adapter<ReapeaterDevice
     public void onBindViewHolder(CryptoViewHolder holder, int position, List<Object> payloads) {
 
         if (payloads.isEmpty()) {
+            //System.out.println("onbinder");
+
             super.onBindViewHolder(holder, position, payloads);
         } else {
             Bundle o = (Bundle) payloads.get(0);
-            System.out.println("onbinder");
+            //System.out.println("in keyset");
+
             for (String key : o.keySet()) {
                 if (key.equals("price")) {
                     holder.mName.setText(data.get(position).macdev);
@@ -78,12 +85,18 @@ public class ReapeaterDeviceAdapter extends RecyclerView.Adapter<ReapeaterDevice
 
     public void setData(ArrayList<RepeaterModel> newData) {
 
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new MyDiffUtilCallBack(newData, data));
+        MyDiffUtilCallBack diffCallBack = new MyDiffUtilCallBack( this.data,newData);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallBack);
+
+
+        //this.data=newData;
         this.data.clear();
         this.data.addAll(newData);
         diffResult.dispatchUpdatesTo(this);
+        //this.data.clear();
+        //this.data.addAll(newData);
+        //this.notifyDataSetChanged();
 
-        this.notifyDataSetChanged();
     }
 
 

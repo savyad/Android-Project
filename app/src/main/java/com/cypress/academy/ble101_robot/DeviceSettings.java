@@ -1,7 +1,5 @@
 package com.cypress.academy.ble101_robot;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.BroadcastReceiver;
@@ -12,43 +10,33 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
-import android.text.method.ScrollingMovementMethod;
+//import androidx.core.content.LocalBroadcastManager;
+//import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.Reader;
 import java.io.StringReader;
-import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.opencsv.*;
 
 import com.highsoft.highcharts.core.*;
 import com.highsoft.highcharts.common.hichartsclasses.*;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 //import com.chilkatsoft.*;
 

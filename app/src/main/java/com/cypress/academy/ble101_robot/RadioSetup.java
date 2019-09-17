@@ -8,8 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
+//import androidx.core.content.LocalBroadcastManager;
+//import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +17,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Switch;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import org.json.JSONObject;
 
@@ -120,8 +123,8 @@ public class RadioSetup extends AppCompatActivity {
         tx_ch.setAdapter(txch_spinnerArrayAdapter);
 
         trpower_array[0] = new MyData("Low","0");
-        trpower_array[1] = new MyData("Mid","1");
-        trpower_array[2] = new MyData("High","2");
+        trpower_array[1] = new MyData("Mid","4");
+        trpower_array[2] = new MyData("High","8");
 
         tpower_spinnerArrayAdapter = new ArrayAdapter<MyData>(
                 RadioSetup.this, R.layout.spinner_log_trigger, trpower_array);

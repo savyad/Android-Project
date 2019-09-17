@@ -2,15 +2,17 @@ package com.cypress.academy.ble101_robot;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+//import androidx.core.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import androidx.fragment.app.Fragment;
+
 
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link } subclass.
  * Activities that contain this fragment must implement the
  * {@link FragmentContents.OnFragmentInteractionListener} interface
  * to handle interaction events.

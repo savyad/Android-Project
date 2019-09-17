@@ -2,7 +2,6 @@ package com.cypress.academy.ble101_robot;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
@@ -85,6 +86,10 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ProductVie
                         intent4.putExtra(SINGLE_DEV_DATA,dev);
                         mCtx.startActivity(intent4);
                         break;
+                    case "8013":
+                        final Intent intent5 = new Intent(mCtx,DeviceThermoDoor.class);
+                        intent5.putExtra(SINGLE_DEV_DATA,dev);
+                        mCtx.startActivity(intent5);
                         default:
                             break;
 
@@ -95,6 +100,18 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ProductVie
                     intent4.putExtra(SINGLE_DEV_DATA,dev);
                     mCtx.startActivity(intent4);
                 }
+                if(dev.getManuid()==23038)
+                {
+                    final Intent intent4 = new Intent(mCtx, DfuActivityMain.class);
+                    intent4.putExtra(SINGLE_DEV_DATA,dev);
+                    mCtx.startActivity(intent4);
+                }
+               /* else if(dev.getManuid()==87)
+                {
+                    final Intent intent3 = new Intent(mCtx, DeviceThermoDoor.class);
+                    intent3.putExtra(SINGLE_DEV_DATA,dev);
+                    mCtx.startActivity(intent3);
+                }*/
                 /*final Intent intent = new Intent(mCtx, DeviceDecisions.class);
                 intent.putExtra(SINGLE_DEV_DATA,dev);
 

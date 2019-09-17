@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#465446</color>
     <color name="colorAccent">#b61432</color>
     <color name="primary_dark_material_dark_1">#949494</color>
+    <color name="dfu_activity_background">#858383</color>
 </resources>

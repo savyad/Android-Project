@@ -14,13 +14,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.support.v4.content.LocalBroadcastManager;
+//import androidx.core.content.LocalBroadcastManager;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import java.util.List;
-import java.util.Queue;
 import java.util.UUID;
 
 public class BluetoothLeService extends Service {

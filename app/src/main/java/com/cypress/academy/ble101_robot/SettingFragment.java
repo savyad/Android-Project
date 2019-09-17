@@ -2,16 +2,16 @@ package com.cypress.academy.ble101_robot;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
+/*import android.support.annotation.Nullable;
+import androidx.core.app.Fragment;
+import androidx.core.app.FragmentTransaction;
+import androidx.core.view.ViewPager;*/
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.support.v4.app.FragmentManager;
+//import androidx.core.app.FragmentManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -20,12 +20,14 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.google.gson.JsonObject;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.nio.charset.CharacterCodingException;
 
 public class SettingFragment extends Fragment
 {

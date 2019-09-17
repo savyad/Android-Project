@@ -18,6 +18,13 @@
     </string-array>
     <string name="title_activity_configuration_view">ConfigurationView</string>
     <string name="title_activity_sensor_setup">SensorSetup</string>
+    <string name="percent">"%"</string>
+    <string name="init_message_dfu">Starting DFU...</string>
+    <string name="dfu_sd_version_failure_error">SD Version failure</string>
+    <string name="dfu_device_disconnected">Device Disconnected Unexpectedly</string>
+
+
+
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
@@ -114,4 +121,6 @@
     <string name="title_activity_download_csv">DownloadCsv</string>
     <string name="title_activity_sensor_calibrate">SensorCalibrate</string>
     <string name="title_activity_device_flow">DeviceFlow</string>
+    <string name="dfu_file_status_ok">Valid File</string>
+    <string name="dfu_file_status_invalid">Invalid File</string>
 </resources>

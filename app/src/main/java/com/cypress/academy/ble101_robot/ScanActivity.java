@@ -51,16 +51,22 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ParcelUuid;
-import android.support.annotation.NonNull;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+//import android.support.annotation.NonNull;
+//import androidx.core.widget.SwipeRefreshLayout;
+//import android.support.v7.app.AppCompatActivity;
+//import android.support.v7.widget.LinearLayoutManager;
+//import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseArray;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -149,14 +155,14 @@ public class ScanActivity extends AppCompatActivity {
         //This section required for Android 6.0 (Marshmallow) permissions
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // Android M Permission check 
-            if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("This app needs location access ");
                 builder.setMessage("Please grant location access so this app can detect devices.");
                 builder.setPositiveButton(android.R.string.ok, null);
                 builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     public void onDismiss(DialogInterface dialog) {
-                        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_COARSE_LOCATION);
+                        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_COARSE_LOCATION);
                     }
                 });
                 builder.show();
@@ -320,13 +326,22 @@ public class ScanActivity extends AppCompatActivity {
 
                 UUID uid = convertFromInteger(0x0001);//UUID.fromString("0x0001");
                 ParcelUuid PUuid = new ParcelUuid(uid);
+
+                UUID servicedfuUUid= convertFromInteger(0xFE59);//UUID.fromString("0x0001");
+                ParcelUuid servivedfuPUuid = new ParcelUuid(servicedfuUUid);
                 //ScanFilter filter = new ScanFilter.Builder().setServiceUuid(PUuid).build();
                ScanFilter filter = new ScanFilter.Builder().setManufacturerData(89,new byte[] {}).build();
                ScanFilter filte2 = new ScanFilter.Builder().setManufacturerData(3328,new byte[] {}).build();
                 ScanFilter filter3 = new ScanFilter.Builder().setManufacturerData(88,new byte[] {}).build();
+                ScanFilter filter4 = new ScanFilter.Builder().setManufacturerData(87,new byte[] {}).build();
+                ScanFilter filterdfu = new ScanFilter.Builder().setServiceUuid(servivedfuPUuid).build();
+
                 filters.add(filter);
                 filters.add(filte2);
                 filters.add(filter3);
+                filters.add(filter4);
+                filters.add(filterdfu);
+
 
                 if(mLEScanner==null)
                 {
@@ -423,14 +438,31 @@ public class ScanActivity extends AppCompatActivity {
                 //int flags = result.getScanRecord().getAdvertiseFlags();
                 mBluetoothDevice.add(result.getDevice());
                 ScanRecord scanRecord = result.getScanRecord();
-               // byte[]  manufacturerData = scanRecord.getManufacturerSpecificData(89);
                 SparseArray<byte[]> data = scanRecord.getManufacturerSpecificData();
-               //System.out.println(result.getDevice().getAddress()+" "+result.getDevice().getName());
-              //  if(manufacturerData!=null)
-              //  {
+
+                String name;
+                if(data.keyAt(0)==88)
+                {
+                    name="Repeater";
+                }
+                else if(data.keyAt(0)==87)
+                {
+                    name="Gateway";
+                }
+                else
+                {
+                    name=result.getDevice().getName();
+                }
+                int manuids = data.keyAt(0);
+
+                if(data.keyAt(0)==0)
+                    if(scanRecord.getServiceUuids().get(0).toString().contains("fe59"))
+                        manuids = 23038;
+
+
                 if(data.size()==0)
                 {
-                    templistdev.add(new DevData(result.getRssi(), result.getDevice().getAddress(), result.getDevice().getName(), "Press me to Connect", data.keyAt(0)));//bytesToHex(manufacturerData)));
+                    templistdev.add(new DevData(result.getRssi(), result.getDevice().getAddress(), name, "Press me to Connect", manuids));//bytesToHex(manufacturerData)));
                     devDataList = templistdev;
                     adapter = new DeviceAdapter(ScanActivity.this, devDataList);
                     recyclerView.setAdapter(adapter);
@@ -439,7 +471,7 @@ public class ScanActivity extends AppCompatActivity {
                 else
                 {
 
-                    templistdev.add(new DevData(result.getRssi(), result.getDevice().getAddress(), result.getDevice().getName(), SbytesToHex(data), data.keyAt(0)));//bytesToHex(manufacturerData)));
+                    templistdev.add(new DevData(result.getRssi(), result.getDevice().getAddress(), name, SbytesToHex(data), manuids));//bytesToHex(manufacturerData)));
                     devDataList = templistdev;
                     adapter = new DeviceAdapter(ScanActivity.this, devDataList);
                     recyclerView.setAdapter(adapter);

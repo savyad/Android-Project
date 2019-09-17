@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.cypress.academy.ble101_robot">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.cypress.academy.ble101_robot"
+    android:appComponentFactory="whateverString"
+    tools:replace="android:appComponentFactory">
 
     <uses-feature
         android:name="android.hardware.bluetooth_le"
@@ -8,7 +11,7 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" /> <!-- Location permission required for android 6.0 (Marshmallow) -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -18,7 +21,17 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RepeaterAdvertise"></activity>
+        <activity android:name=".DfuActivityMain"
+            android:label="DFU"
+            ></activity>
+        <activity android:name=".NotificationActivity" />
+
+        <service
+            android:name=".DfuService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".RepeaterAdvertise" />
         <activity android:name=".ConfigureGateway" />
         <activity android:name=".RadioSetup" />
         <activity
@@ -26,7 +39,7 @@
             android:label="@string/title_activity_device_flow" />
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="com.cypress.academy.ble101_robot.FileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
